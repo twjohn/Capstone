@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Transmitters>
+    <Transmitter ID="ULXTE-2">
+        <PA>2</PA >
+        <Cabinets>1</Cabinets>
+        <Powerblocks>1</Powerblocks>
+        <Linesize>1-5/8</Linesize>
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-4">
+        <PA>4</PA >
+        <Cabinets>1</Cabinets>
+        <Powerblocks>1</Powerblocks>
+        <Linesize>3-1/8</Linesize>
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-6">
+        <PA>8</PA >
+        <Cabinets>1</Cabinets>
+        <Powerblocks>1</Powerblocks>
+        <Linesize>3-1//8</Linesize>
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-8">
+        <PA>6</PA >
+        <Cabinets>1</Cabinets>
+        <Powerblocks>1</Powerblocks>
+        <Linesize>3-1/8</Linesize>
+    </Transmitter>
+
+</Transmitters>
