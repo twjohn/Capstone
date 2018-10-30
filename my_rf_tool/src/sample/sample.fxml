@@ -6,31 +6,46 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?scenebuilder-background-color 0xdae5ffff?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="799.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="AnchorPane" fx:id="TX" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="995.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
     <children>
-        <ComboBox fx:id="trans_cb" blendMode="SRC_OVER" cache="false" disable="false" editable="false" layoutX="27.0" layoutY="47.0" mouseTransparent="false" prefHeight="25.0" prefWidth="172.0" promptText="SELECT TRANSMITTER">
+        <ComboBox fx:id="tx_cb" blendMode="SRC_OVER" cache="false" disable="false" editable="false" layoutX="27.0" layoutY="47.0" mouseTransparent="false" onAction="#getTXInfo" prefHeight="25.0" prefWidth="172.0" promptText="SELECT TRANSMITTER">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="ULXTE-2" />
-                    <String fx:value="Item 2" />
-                    <String fx:value="Item 3" />
+                    <String fx:value="ULXTE-4" />
+                    <String fx:value="ULXTE-6" />
+                    <String fx:value="ULXTE-8" />
+                    <String fx:value="ULXTE-10" />
+                    <String fx:value="ULXTE-12" />
+                    <String fx:value="ULXTE-16" />
+                    <String fx:value="ULXTE-20" />
+                    <String fx:value="ULXTE-24" />
+                    <String fx:value="ULXTE-30" />
+                    <String fx:value="ULXTE-40" />
+                    <String fx:value="ULXTE-50" />
+                    <String fx:value="ULXTE-60" />
+                    <String fx:value="ULXTE-72" />
+                    <String fx:value="ULXTE-80" />
+                    <String fx:value="ULXTE-90" />
+                    <String fx:value="ULXTE-100" />
+                    <String fx:value="ULXTE-120" />
+                    <String fx:value="ULXTE-150" />
                 </FXCollections>
             </items>
         </ComboBox>
-        <Button layoutX="27.0" layoutY="139.0" mnemonicParsing="false" text="Generate Report" />
+        <Button fx:id="genRep" layoutX="27.0" layoutY="139.0" mnemonicParsing="false" onAction="#genNewRep" text="Generate Report" />
         <TextField layoutX="83.0" layoutY="14.0" prefWidth="71.0" />
         <TextField layoutX="208.0" layoutY="14.0" prefWidth="71.0" />
-        <Label layoutX="27.0" layoutY="17.0" text="Channel" />
-        <Label layoutX="169.0" layoutY="17.0" text="TPO" />
+        <Label layoutX="27.0" layoutY="17.0" text="Channel: " />
+        <Label layoutX="169.0" layoutY="17.0" text="TPO: " />
         <Label layoutX="284.0" layoutY="17.0" text="KW" />
         <CheckBox layoutX="208.0" layoutY="51.0" mnemonicParsing="false" text="Dual Exciters" />
-        <ComboBox layoutX="311.0" layoutY="47.0" prefHeight="25.0" prefWidth="150.0" promptText="Aux Antenna Feed">
+        <ComboBox layoutX="311.0" layoutY="47.0" prefHeight="25.0" prefWidth="150.0" promptText="Main Antenna Feed">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Item 1" />
@@ -39,7 +54,7 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <ComboBox layoutX="311.0" layoutY="78.0" prefHeight="25.0" prefWidth="150.0">
+        <ComboBox layoutX="311.0" layoutY="78.0" prefHeight="25.0" prefWidth="150.0" promptText="Aux Antenna Feed">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Item 1" />
@@ -48,7 +63,7 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <ComboBox layoutX="27.0" layoutY="78.0" prefHeight="21.0" prefWidth="150.0">
+        <ComboBox layoutX="27.0" layoutY="78.0" prefHeight="21.0" prefWidth="150.0" promptText="PA Modules">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Item 1" />
@@ -57,7 +72,7 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <ComboBox layoutX="192.0" layoutY="79.0" prefHeight="25.0" prefWidth="104.0">
+        <ComboBox layoutX="192.0" layoutY="79.0" prefHeight="25.0" prefWidth="104.0" promptText="Exciter S.W.">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Item 1" />
@@ -66,7 +81,7 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <ComboBox layoutX="27.0" layoutY="108.0" prefHeight="21.0" prefWidth="150.0">
+        <ComboBox layoutX="27.0" layoutY="108.0" prefHeight="21.0" prefWidth="150.0" promptText="Filter">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Item 1" />
@@ -75,7 +90,7 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <ComboBox layoutX="192.0" layoutY="108.0" prefHeight="25.0" prefWidth="104.0">
+        <ComboBox layoutX="192.0" layoutY="108.0" prefHeight="25.0" prefWidth="104.0" promptText="Switch/Patch">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Item 1" />
@@ -84,7 +99,7 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <ComboBox layoutX="311.0" layoutY="108.0" prefHeight="25.0" prefWidth="150.0">
+        <ComboBox layoutX="311.0" layoutY="108.0" prefHeight="25.0" prefWidth="150.0" promptText="Test Load">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Item 1" />
@@ -94,6 +109,6 @@
             </items>
         </ComboBox>
       <ImageView fitHeight="201.0" fitWidth="431.0" layoutX="27.0" layoutY="178.0" pickOnBounds="true" preserveRatio="true" />
-      <ListView layoutX="480.0" layoutY="17.0" prefHeight="362.0" prefWidth="308.0" />
+      <Label fx:id="TX_Text" layoutX="484.0" layoutY="51.0" prefHeight="17.0" prefWidth="674.0" text="Label" />
     </children>
 </AnchorPane>
