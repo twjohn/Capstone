@@ -18,7 +18,7 @@ class Transmitter {
 
     @Override
     public String toString() {
-        return "<" + ID + ", number of PA modules: " + PA + ", number of cabinets: " + Cabinets + ", number of power blocks: " + Powerblocks + ", output line size is "
-                + Linesize + "\">";
+        return "Transmitter Model: " +ID + "\nNumber of PA Modules: " + PA + "\nNumber of Cabinets: " + Cabinets + "\nNumber of Power Blocks: " + Powerblocks + "\nOutput Line Size: "
+                + Linesize+"\"";
     }
 }
