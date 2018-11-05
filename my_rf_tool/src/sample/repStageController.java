@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -30,9 +31,16 @@ import java.util.ResourceBundle;
 
 public class repStageController implements Initializable {
 
+    public ListView itemReport;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        itemReport.getItems().add("this is a item1");
+        itemReport.getItems().add("this is a item2");
+    }
+    public void setVals(int tx){
+        itemReport.getItems().add(tx);
 
     }
 }

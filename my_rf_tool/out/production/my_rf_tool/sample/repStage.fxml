@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Arc?>
+<?import javafx.scene.layout.BorderPane?>
 
-<AnchorPane fx:id="repStage" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Arc fill="DODGERBLUE" layoutX="300.0" layoutY="177.0" length="270.0" radiusX="100.0" radiusY="100.0" startAngle="45.0" stroke="BLACK" strokeType="INSIDE" type="ROUND" />
-   </children>
-</AnchorPane>
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.repStageController">
+  <tabs>
+    <Tab text="Items Report">
+         <content>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <center>
+                  <ListView fx:id="itemReport" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+               </center></BorderPane>
+         </content>
+    </Tab>
+    <Tab text="RF Flow Diagram">
+         <content>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+         </content>
+    </Tab>
+  </tabs>
+</TabPane>

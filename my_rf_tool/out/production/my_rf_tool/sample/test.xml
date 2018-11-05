@@ -6,6 +6,11 @@
         <Cabinets>1</Cabinets>
         <Powerblocks>1</Powerblocks>
         <Linesize>1-5/8</Linesize>
+            <Filter>FLUA-05500-6AT</Filter>
+            <Filter>FLUA-02500-6AT-6C</Filter>
+            <Filter>FLUA-05500-6AT-6C</Filter>
+            <Filter>FLUA-02500-6AT-C</Filter>
+            <Filter>FLUA-05500-6AT-C</Filter>
     </Transmitter>
 
     <Transmitter ID="ULXTE-4">

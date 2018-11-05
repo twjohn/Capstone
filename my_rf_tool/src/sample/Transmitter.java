@@ -7,6 +7,7 @@ class Transmitter {
     private int Cabinets;
     private int Powerblocks;
     private String Linesize;
+    private String filter;
 
     public Transmitter(String ID, int PA, int Cabinets, int Powerblocks, String Linesize) {
         this.ID = ID;
@@ -14,6 +15,9 @@ class Transmitter {
         this.Cabinets = Cabinets;
         this.Powerblocks = Powerblocks;
         this.Linesize = Linesize;
+    }
+    public String Filters(String filter) {
+        return this.filter = filter;
     }
 
     @Override

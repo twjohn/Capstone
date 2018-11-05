@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -14,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?scenebuilder-background-color 0xdae5ffff?>
 
-<BorderPane style="-fx-border-width: 3; -fx-background-color: rgb(216, 216, 216); -fx-border-color: rgb(239, 239, 239);" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<BorderPane style="-fx-border-width: 3; -fx-background-color: rgb(216, 216, 216); -fx-border-color: rgb(239, 239, 239);" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
   <bottom>
     <VBox prefHeight="170.0" prefWidth="590.0" BorderPane.alignment="CENTER">
       <children>
@@ -87,10 +88,18 @@
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" fx:id="x3" />
               </HBox.margin>
             </ComboBox>
-            <CheckBox contentDisplay="CENTER" mnemonicParsing="false" prefWidth="190.0" text="Dual Exciters" HBox.margin="$x3" />
-            <ComboBox prefHeight="31.0" prefWidth="190.0" promptText="Main Antenna Feed" HBox.margin="$x3">
+            <CheckBox fx:id="dualExciter" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="190.0" text="Dual Exciters" HBox.margin="$x3" />
+            <ComboBox fx:id="mainAntFeed" prefHeight="31.0" prefWidth="190.0" promptText="Main Antenna Feed" HBox.margin="$x3">
               <items>
-                <FXCollections fx:factory="observableArrayList" />
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="1-5/8" />
+                    <String fx:value="3-1/8" />
+                    <String fx:value="4-1/16" />
+                    <String fx:value="6-1/8 50Ω" />
+                    <String fx:value="6-1/8 75Ω" />
+                    <String fx:value="7-3/16" />
+                    <String fx:value="8-3/16" />
+                </FXCollections>
               </items>
             </ComboBox>
           </children>
@@ -99,34 +108,56 @@
           <children>
             <ComboBox fx:id="paModules" prefHeight="21.0" prefWidth="190.0" promptText="PA Modules" HBox.margin="$x3">
               <items>
-                <FXCollections fx:factory="observableArrayList" />
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="TYPE E Band A" />
+                    <String fx:value="TYPE D Band A" />
+                    <String fx:value="TYPE D Band B" />
+                    <String fx:value="TYPE D Band C" />
+                </FXCollections>
               </items>
             </ComboBox>
-            <ComboBox prefHeight="21.0" prefWidth="190.0" promptText="Exciter S.W." HBox.margin="$x3">
+            <ComboBox fx:id="exciter" prefHeight="21.0" prefWidth="190.0" promptText="Exciter S.W." HBox.margin="$x3">
               <items>
-                <FXCollections fx:factory="observableArrayList" />
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="XTE ATSC 1.0/2.0" />
+                    <String fx:value="XTE ATSC 3.0" />
+                    <String fx:value="XTE DVB-T" />
+                    <String fx:value="XTE ISDB-T" />
+                    <String fx:value="XTE DVB-T2" />
+                    <String fx:value="XTE DTMB" />
+                    <String fx:value="XTE DVB-T2 LITE" />
+                </FXCollections>
               </items>
             </ComboBox>
-            <ComboBox prefHeight="21.0" prefWidth="190.0" promptText="Aux Antenna Feed" HBox.margin="$x3">
+            <ComboBox fx:id="auxAntFeed" prefHeight="21.0" prefWidth="190.0" promptText="Aux Antenna Feed" HBox.margin="$x3">
               <items>
-                <FXCollections fx:factory="observableArrayList" />
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="No Aux Antenna" />
+                    <String fx:value="1-5/8" />
+                    <String fx:value="3-1/8" />
+                    <String fx:value="4-1/16" />
+                    <String fx:value="6-1/8 50Ω" />
+                    <String fx:value="6-1/8 75Ω" />
+                    <String fx:value="7-3/16" />
+                    <String fx:value="8-3/16" />
+                </FXCollections>
               </items>
             </ComboBox>
           </children>
         </HBox>
         <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="45.0" prefWidth="426.0">
           <children>
-            <ComboBox prefHeight="21.0" prefWidth="190.0" promptText="Filter" HBox.margin="$x3">
+            <ComboBox fx:id="filter" prefHeight="21.0" prefWidth="190.0" promptText="Filter" HBox.margin="$x3">
               <items>
                 <FXCollections fx:factory="observableArrayList" />
               </items>
             </ComboBox>
-            <ComboBox prefHeight="21.0" prefWidth="190.0" promptText="Switch/Patch" HBox.margin="$x3">
+            <ComboBox fx:id="switchPatch" prefHeight="21.0" prefWidth="190.0" promptText="Switch/Patch" HBox.margin="$x3">
               <items>
                 <FXCollections fx:factory="observableArrayList" />
               </items>
             </ComboBox>
-            <ComboBox prefHeight="21.0" prefWidth="190.0" promptText="Test Load" HBox.margin="$x3">
+            <ComboBox fx:id="testLoad" prefHeight="21.0" prefWidth="190.0" promptText="Test Load" HBox.margin="$x3">
               <items>
                 <FXCollections fx:factory="observableArrayList" />
               </items>
@@ -136,7 +167,10 @@
         <Button fx:id="genRep" mnemonicParsing="false" onAction="#genNewRep" prefHeight="28.0" prefWidth="186.0" text="Generate Report" textAlignment="CENTER">
                <font>
                   <Font size="14.0" />
-               </font></Button>
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin></Button>
         <Label id="errCatcher" fx:id="errCatcher" alignment="CENTER" prefHeight="20.0" prefWidth="453.0" textAlignment="CENTER">
           <font>
             <Font size="14.0" />
