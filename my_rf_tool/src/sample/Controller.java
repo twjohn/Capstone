@@ -88,7 +88,7 @@ public class Controller implements Initializable {
         // Load the input XML document, parse it and return an instance of the document class. will need to make this work on any computer somehow.
         Document document = null;
         try {
-            document = builder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\test.xml"));
+            document = builder.parse(new File("H:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\test.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -152,7 +152,7 @@ public class Controller implements Initializable {
             //can delete this section later based upon the route we take for generating rf diagram and item report
             errCatcher.setTextFill(Color.web("#00bc4e"));
             errCatcher.setText("RF Diagram generated...");
-            File file = new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\gates.png");
+            File file = new File("H:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\gates.png");
             Image image = new Image(file.toURI().toString());
             repImage.setImage(image);
             System.out.println("RF Diagram for specified input found \n displaying diagram now...");
@@ -176,7 +176,7 @@ public class Controller implements Initializable {
         // Load the input XML document, parse it and return an instance of the document class. will need to make this work on any computer somehow.
         Document document = null;
         try {
-            document = builder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\test.xml"));
+            document = builder.parse(new File("H:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\test.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -206,10 +206,10 @@ public class Controller implements Initializable {
                     //gets each individual type of filter for selected transmitter
 
                     //////////////////////////////testing passing vars to new scene///////////
-                    FXMLLoader loader=new FXMLLoader(getClass().getResource("repStage.fxml"));
+                   // FXMLLoader loader=new FXMLLoader(getClass().getResource("repStage.fxml"));
 
-                    repStageController tx = loader.getController();
-                   tx.setVals(1);
+                  //  repStageController tx = loader.getController();
+                   //tx.setVals(1);
                     /////////////////////////////////////////////////////////////////////////
                     NodeList FilterNameList = elem.getElementsByTagName("Filter");
                     filter.getItems().clear();//clear combo box and repopulate with appropriate options for filter
