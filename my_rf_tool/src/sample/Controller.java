@@ -8,10 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -24,10 +21,17 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import javax.swing.text.AbstractDocument;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -36,43 +40,60 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 public class Controller implements Initializable {
 
     //FXML elements
-    public Label TX_Text,errCatcher;
+    public Label TX_Text, errCatcher;
     public Button genRep;
-    public ComboBox tx_cb,paModules,exciter,filter;
+    public ComboBox tx_cb, paModules, mainExciterSW, filter, switchPatch, testLoad;
     public TextField channel, tpo;
     public ImageView repImage;
+    public CheckBox dualExciter;
+    private Parent parent;
+    private repStageController report;
 
     //var used to get Transmitter ID
-    private String ID;
-    private int pa;
-    private String Filter;
+    private static String ID, linesize;
+    private static int pa, powerblocks;
+    private static Double powerRating;
+    protected static String txSelection;
+    //var to hold selected tx's power rating
+    public static Double TestPower, switchPower, channelNumber, channelLimit, filterPower;
+    public static String filterSize, filterPIDDescription, filterPID;
+    public static int cabinets;
+    public static String SWPIDDESCRIPTION, SWPID, selectedSWDescription;
 
-    //////////////////////////START AT RUNTIME initialize()//////////////////////////////////////////
+    /********************** START initialize() **********************/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //////////////////////////start non-numerical input checker//////////////////////////////////////////
-        exciter.getSelectionModel().selectFirst();
-        paModules.getSelectionModel().selectFirst();
+        /********************** START non-numerical input checker **********************/
+
+        tpo.setText("1");/** set default values for tpo textbox **/
+
+        channel.setText("2");/** set default values for channel textbox **/
+
+        getMainSWInfo();/** Loads switch info upon window initialization **/
+
+        mainExciterSW.getSelectionModel().selectFirst();/** Automatically picks first selection for mainExciterSW **/
+        paModules.getSelectionModel().selectFirst(); /** Automatically picks first selection for paModules **/
+
+        /***************** channel textbox input checker(allows integers only) *****************/
         channel.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*"))
-                    channel.setText(newValue.replaceAll("[^\\d]", ""));
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d*")) channel.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
+
+        /***************** tpo textbox input checker(allows decimal numbers and integers) *****************/
         tpo.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*"))
-                    tpo.setText(newValue.replaceAll("[^\\d]", ""));
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d*")) tpo.setText(newValue.replaceAll("[^\\d.]", ""));
             }
         });
-        //////////////////////////////// end non-numerical input checker///////////////////////////////////
+        /********************** END non-numerical input checker **********************/
 
         //print out that RF Tool is loading
         System.out.println("Loading RF Tool...");
@@ -85,10 +106,11 @@ public class Controller implements Initializable {
             e.printStackTrace();
         }
 
-        // Load the input XML document, parse it and return an instance of the document class. will need to make this work on any computer somehow.
+        /** Load the input XML document, parse it and return an instance of the document class. will need to make this work on any computer somehow **/
+
         Document document = null;
         try {
-            document = builder.parse(new File("H:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\test.xml"));
+            document = builder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\test.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -97,73 +119,95 @@ public class Controller implements Initializable {
         //refere to Transmitter.java
         List<sample.Transmitter> transmitters = new ArrayList<sample.Transmitter>();
         NodeList nodeList = document.getDocumentElement().getChildNodes();
-        for (int i = 0; i < nodeList.getLength(); i++) {        //loop through to get every item and its attributes from the test.xml
+        for (int i = 0; i < nodeList.getLength(); i++) {/** loop through to get every item and its attributes from the test.xml **/
             Node node = nodeList.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element elem = (Element) node;
-                // Get the value of the ID attribute.
+                /** Get the value of the ID attribute **/
                 ID = node.getAttributes().getNamedItem("ID").getNodeValue();// transmitters(i.e. ULXTE-2)
-                // Get the value of all sub-elements.
+                /**  Get the value of all sub-elements **/
                 pa = Integer.parseInt(elem.getElementsByTagName("PA").item(0).getChildNodes().item(0).getNodeValue());//pa modules
                 int cabinets = Integer.parseInt(elem.getElementsByTagName("Cabinets").item(0).getChildNodes().item(0).getNodeValue());//cabinets
                 int powerblocks = Integer.parseInt(elem.getElementsByTagName("Powerblocks").item(0).getChildNodes().item(0).getNodeValue());//power blocks
                 String linesize = elem.getElementsByTagName("Linesize").item(0).getChildNodes().item(0).getNodeValue();//line size
-                transmitters.add(new sample.Transmitter(ID, pa, cabinets, powerblocks, linesize));//call constructor in Transmitter.java to set values for variables
-                //read transmitter ID's into tx_cb combo box
-                tx_cb.getItems().add(ID);//add each ID(i.e. ULXTE-2) to tx_cb combo box
-                System.out.println(ID+ " added to Transmitter combo box");//print info to console
+                powerRating = Double.parseDouble(elem.getElementsByTagName("Power").item(0).getChildNodes().item(0).getNodeValue());
+
+                transmitters.add(new sample.Transmitter(ID, pa, cabinets, powerblocks, linesize, powerRating));//call constructor in Transmitter.java to set values for variables
+                /** read transmitter ID's into tx_cb combo box **/
+                if(powerRating > Double.parseDouble(tpo.getText()))
+                tx_cb.getItems().add(ID);/** add each ID(i.e. ULXTE-2) to tx_cb combo box **/
+
+                System.out.println(ID + " added to Transmitter combo box");//print info to console
             }
         }
     }
-    ////////////////////////////////END initialize()///////////////////////////////////////////////////
+    /********************** END initialize() **********************
+    ---------------------------------------------------------------
+/   ********************** START genNewRep() **********************/
 
-    //////////////////////////////// start genNewRep() ////////////////////////////////////////////////
-    //@FXML
-     public  void genNewRep(){
+    public void genNewRep() {
         ////////////////////////////////Open new window for report and rf diagram////////////////////////////////////////
-        if(tx_cb.getValue()==null){//conditional to tell if enough information was provide to construct a rf diagram
+
+        if (tx_cb.getValue() == null) {//conditional to tell if enough information was provide to construct a rf diagram
             System.out.println("Not enough information available to generate proper diagram...");
             errCatcher.setTextFill(Color.web("#ff0000"));
             errCatcher.setText("Not enough information available to generate proper diagram...");
 
-        }
-        else {
+        } else {
             genRep.setOnMouseClicked((event) -> {
-                try {//when genRep button is clicked, a event occurs and opens a new window, if unable to open, a error is caught
+                try {/** when genRep button is clicked, a event occurs and opens a new window, if unable to open, a error is caught **/
+
+                    /** put code back here for transferring of values. a more efficient way is being tested **/
+                    selectedSWDescription = (String)mainExciterSW.getValue();
+                    System.out.println("my troubleshot-------------" +selectedSWDescription);
                     FXMLLoader fxmlLoader = new FXMLLoader();
                     fxmlLoader.setLocation(getClass().getResource("repStage.fxml"));
-                    //FXMLLoader loader=new FXMLLoader(getClass().getResource("repStage.fxml"));
                     Scene scene = new Scene(fxmlLoader.load(), 600, 400);
                     Stage stage = new Stage();
                     stage.setTitle("Generated report");
                     stage.setScene(scene);
                     stage.show();
-
-
-                  //  repStageController tx = new repStageController();
-                   // tx.setVals(1);
-                }
-
-                catch (IOException e){
+                } catch (IOException e) {
                     Logger logger = Logger.getLogger(getClass().getName());
                     logger.log(Level.SEVERE, "Failed to create generate report.", e);
                 }
             });
-            //can delete this section later based upon the route we take for generating rf diagram and item report
+            /** displays and opens new window when proper input is detected for all cases **/
             errCatcher.setTextFill(Color.web("#00bc4e"));
             errCatcher.setText("RF Diagram generated...");
-            File file = new File("H:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\gates.png");
-            Image image = new Image(file.toURI().toString());
-            repImage.setImage(image);
-            System.out.println("RF Diagram for specified input found \n displaying diagram now...");
             ///////////////////////////////////////////////////////////////////////////////////////////////////////
         }
         ////////////////////////////////end open new window for report and rf diagram////////////////////////////////////
 
-        }
-        ////////////////////////////End genNewRep()/////////////////////////////////////////
+        getSWPID();
+
+    }
+    ////////////////////////////End genNewRep()/////////////////////////////////////////
+
+    //simple method to check if tpo textfield is empty and sets focus to it
+    public void tpoCheck() {
+        if (tpo.getText().isEmpty()) {
+            tpo.selectAll();
+            tpo.requestFocus();
+        } else System.out.println(tpo.getText());
+    }
+
+    //method to check if dual exciter check box is selected returns true if selected
+    public boolean checkDualExciters() {
+        if (dualExciter.isSelected())
+            return true;
+        else return false;
+    }
 
     public void getTXInfo() {//event for when a transmitter is picked from tx_cb combo box
+
+        tpoCheck();
+        channelNumber = Double.parseDouble(channel.getText());
+        System.out.println(channelNumber);
+
+        /** set satic value for new scene **/
+        txSelection = (String)tx_cb.getValue();
+
         System.out.println(" ");    //just adding some space for clarity on console print out
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = null;
@@ -176,7 +220,7 @@ public class Controller implements Initializable {
         // Load the input XML document, parse it and return an instance of the document class. will need to make this work on any computer somehow.
         Document document = null;
         try {
-            document = builder.parse(new File("H:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\test.xml"));
+            document = builder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\test.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -193,48 +237,318 @@ public class Controller implements Initializable {
                 Element elem = (Element) node;
 
                 // Get the value of the ID attribute.
-               ID = node.getAttributes().getNamedItem("ID").getNodeValue();//transmitters(i.e. ULXTE-2)
+                ID = node.getAttributes().getNamedItem("ID").getNodeValue();//transmitters(i.e. ULXTE-2)
                 // Get the value of all sub-elements.
                 pa = Integer.parseInt(elem.getElementsByTagName("PA").item(0).getChildNodes().item(0).getNodeValue());//pa modules
-                int cabinets = Integer.parseInt(elem.getElementsByTagName("Cabinets").item(0).getChildNodes().item(0).getNodeValue());// cabinets
-                int powerblocks = Integer.parseInt(elem.getElementsByTagName("Powerblocks").item(0).getChildNodes().item(0).getNodeValue());// power blocks
-                String linesize = elem.getElementsByTagName("Linesize").item(0).getChildNodes().item(0).getNodeValue();//line size
-                transmitters.add(new Transmitter(ID, pa, cabinets, powerblocks, linesize));//call constructor in Transmitter.java to set values for variables
+                cabinets = Integer.parseInt(elem.getElementsByTagName("Cabinets").item(0).getChildNodes().item(0).getNodeValue());// cabinets
+                powerblocks = Integer.parseInt(elem.getElementsByTagName("Powerblocks").item(0).getChildNodes().item(0).getNodeValue());// power blocks
+                linesize = elem.getElementsByTagName("Linesize").item(0).getChildNodes().item(0).getNodeValue();//line size
+                powerRating = Double.parseDouble(elem.getElementsByTagName("Power").item(0).getChildNodes().item(0).getNodeValue());
+
+                transmitters.add(new Transmitter(ID, pa, cabinets, powerblocks, linesize, powerRating));//call constructor in Transmitter.java to set values for variables
 
                 //breaks for loop when ID == tx_cb value. need ID for populating label element. display info to console about selection.
-                if(ID.equals(tx_cb.getValue())) {
+                if (ID.equals(tx_cb.getValue())) {
                     //gets each individual type of filter for selected transmitter
 
-                    //////////////////////////////testing passing vars to new scene///////////
-                   // FXMLLoader loader=new FXMLLoader(getClass().getResource("repStage.fxml"));
+                    NodeList power = elem.getElementsByTagName("Power");
+                    Node node2 = power.item(0);
+                    //Element maxPow = (Element) node2;
+                    //powerRating = Double.parseDouble(node2.getTextContent());
 
-                  //  repStageController tx = loader.getController();
-                   //tx.setVals(1);
-                    /////////////////////////////////////////////////////////////////////////
-                    NodeList FilterNameList = elem.getElementsByTagName("Filter");
-                    filter.getItems().clear();//clear combo box and repopulate with appropriate options for filter
-                    for(int count = 0; count < FilterNameList.getLength(); count++) { //looping through filters to get all possible filters associated with selected transmitter
-                        Node node1 = FilterNameList.item(count);
-                        if(node1.getNodeType() == node1.ELEMENT_NODE){
-                            Element Filt = (Element) node1;
-                            Filter = Filt.getTextContent();// set variable Filter equal to the content read from Filter XML tag
-                            System.out.println(Filter+" loaded into filter combo box");//print to console
-                            filter.getItems().add(Filter);//add filters to filter combo box
-                        }
-                    }
-                    System.out.println(ID+" selected");
-                    System.out.println(pa+" PA Modules for "+ID);
+                    System.out.println(ID + " selected");
+                    System.out.println(pa + " PA Modules for " + ID);
+                    System.out.println(powerRating);
                     break;
+                }
+            }
+
+        }
+        for (Transmitter tx : transmitters) {
+            if (ID.equals(tx_cb.getValue())) {
+                TX_Text.setText(tx.toString());
+            }
+        }
+
+
+        //***************************************************************
+        //adding switch options after loading tx options
+        //***************************************************************
+        switchPatch.getItems().clear();
+        switchPatch.getItems().add("Switch/Patch");
+        switchPatch.setValue("Switch/Patch");
+
+        DocumentBuilderFactory switchFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder switchBuilder = null;
+        try {
+            switchBuilder = switchFactory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+
+        // Load the input XML document, parse it and return an instance of the document class.
+        Document switchDocument = null;
+        try {
+            switchDocument = switchBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\switches.xml"));
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //refer to Switches.java
+        List<sample.Switches> theSwitches = new ArrayList<sample.Switches>();
+        NodeList switchNodeList = switchDocument.getDocumentElement().getChildNodes();
+        for (int i = 0; i < switchNodeList.getLength(); i++) {        //loop through to get every item and its attributes from the test.xml
+            Node switchNode = switchNodeList.item(i);
+            if (switchNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element switchElement = (Element) switchNode;
+
+                ID = switchNode.getAttributes().getNamedItem("ID").getNodeValue();
+                switchPower = Double.parseDouble(switchElement.getElementsByTagName("powerlimit").item(0).getChildNodes().item(0).getNodeValue());
+                channelLimit = Double.parseDouble(switchElement.getElementsByTagName("channel").item(0).getChildNodes().item(0).getNodeValue());
+
+                if (switchPower > powerRating) {
+
+                    if (channelNumber < 18 && channelLimit < 18) {
+                        theSwitches.add(new sample.Switches(ID, switchPower, channelLimit));
+                        switchPatch.getItems().add(ID);
+                    } else if (channelNumber > 17 && channelLimit > 17 || channelLimit == 0) {
+                        theSwitches.add(new sample.Switches(ID, switchPower, channelLimit));
+                        switchPatch.getItems().add(ID);
                     }
                 }
-
             }
-            for (Transmitter tx : transmitters) {
-                if(ID.equals(tx_cb.getValue())) {
-                    TX_Text.setText(tx.toString());
+        }
+        /***************************************************************
+        * end adding switch options after loading tx options
+        ***************************************************************/
+
+
+        /***************************************************************
+        * adding test load options after loading tx options
+        ***************************************************************/
+        testLoad.getItems().clear();
+        testLoad.getItems().add("Test Load");
+        testLoad.setValue("Test Load");
+
+        DocumentBuilderFactory loadsFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder loadsBuilder = null;
+        try {
+            loadsBuilder = loadsFactory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+
+        Document loadsDocument = null;
+        try {
+            loadsDocument = loadsBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\loads.xml"));
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        List<sample.Loads> theLoads = new ArrayList<sample.Loads>();
+        NodeList loadsNodeList = loadsDocument.getDocumentElement().getChildNodes();
+        for (int i = 0; i < loadsNodeList.getLength(); i++) {        //loop through to get every item and its attributes from the test.xml
+            Node loadsNode = loadsNodeList.item(i);
+            if (loadsNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element loadsElement = (Element) loadsNode;
+
+                ID = loadsNode.getAttributes().getNamedItem("ID").getNodeValue();
+                TestPower = Double.parseDouble(loadsElement.getElementsByTagName("Power").item(0).getChildNodes().item(0).getNodeValue());
+
+                if (TestPower > powerRating) {
+                    theLoads.add(new sample.Loads(ID, TestPower));
+                    testLoad.getItems().add(ID);
                 }
+            }
+        }
+        /***************************************************************
+        //end      adding test load options after loading tx options
+        ***************************************************************/
+        addFilters();  //Call method to add filters to filter combobox
+    }//end of getTXInfo method
+
+
+    /***************************************************************
+    //adding main exciter software options
+    ***************************************************************/
+    public void getMainSWInfo() {
+
+        DocumentBuilderFactory mainExciterSWFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder mainExciterSWBuilder = null;
+
+        try { mainExciterSWBuilder = mainExciterSWFactory.newDocumentBuilder(); }
+        catch (ParserConfigurationException e) { e.printStackTrace(); }
+
+        Document mainExciterSWDocument = null;
+        try { mainExciterSWDocument = mainExciterSWBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\pa_exciter_control.xml")); }
+        catch (SAXException e) { e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); }
+
+        mainExciterSW.getItems().clear();
+        NodeList SWNodeList = mainExciterSWDocument.getDocumentElement().getChildNodes();
+
+            for (int j = 0; j < SWNodeList.getLength(); j++) {
+                Node SWNode = SWNodeList.item(j);
+                if (SWNode.getNodeType() == SWNode.ELEMENT_NODE) {
+                    Element swElement = (Element) SWNode;
+
+                        SWPIDDESCRIPTION = swElement.getElementsByTagName("PIDDESCRIPTION").item(0).getChildNodes().item(0).getNodeValue();
+                        System.out.println(SWPIDDESCRIPTION);
+                        if(SWPIDDESCRIPTION.equals("MODULE PA WIDEBAND (TYPE D)(47-750MHz)"))
+                            break;
+                        mainExciterSW.getItems().add(SWPIDDESCRIPTION);
+
+                }
+            }
+        }
+
+    /***************************************************************
+    //end      adding main exicter software options
+    ***************************************************************/
+
+    /***************************************************************
+    //adding filter options
+    ***************************************************************/
+    public void addFilters(){
+        //Adds filters to filter combobox based on tx power rating and filter power rating
+        filter.getItems().clear();
+        filter.getItems().add("Filter");
+        filter.setValue("Filter");
+
+        DocumentBuilderFactory filteringFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder filterBuilder = null;
+        try {
+            filterBuilder = filteringFactory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+
+        Document filterDocument = null;
+        try {
+            filterDocument = filterBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\maskFiltersCouplers.xml"));
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        List<sample.Filtering> theFilters = new ArrayList<sample.Filtering>();
+        NodeList filtersNodeList = filterDocument.getDocumentElement().getChildNodes();
+        for (int i = 0; i < filtersNodeList.getLength(); i++) {
+            Node filtersNode = filtersNodeList.item(i);
+            if (filtersNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element filtersElement = (Element) filtersNode;
+
+                filterPower = Double.parseDouble((filtersElement.getElementsByTagName("Power").item(0).getChildNodes().item(0).getNodeValue()));
+                filterPIDDescription = filtersElement.getElementsByTagName("PIDDESCRIPTION").item(0).getChildNodes().item(0).getNodeValue();
+                filterSize = filtersElement.getElementsByTagName("Size").item(0).getChildNodes().item(0).getNodeValue();
+                filterPID = filtersElement.getElementsByTagName("PID").item(0).getChildNodes().item(0).getNodeValue();
+
+                if (filterPower > powerRating * 1000 || filterPower * cabinets > powerRating * 1000) { //powerRating is KW need to multiply by 1000 to get into watts
+                    theFilters.add(new sample.Filtering(filterPower, filterPIDDescription, filterSize, filterPID));//filterPower is set in watts    (1,000 watts = 1KW)
+                    filter.getItems().add(filterPIDDescription + " input size " + filterSize);
+                }
+            }
+        }
+    /***************************************************************
+    //end adding filter options
+    ***************************************************************/
+}
+
+public void getSWPID(){
+
+    DocumentBuilderFactory SWIPFactory = DocumentBuilderFactory.newInstance();
+    DocumentBuilder SWIPBuilder = null;
+    try {
+        SWIPBuilder = SWIPFactory.newDocumentBuilder();
+    } catch (ParserConfigurationException e) {
+        e.printStackTrace();
+    }
+
+    Document loadsDocument = null;
+    try {
+        loadsDocument = SWIPBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\pa_exciter_control.xml"));
+    } catch (SAXException e) {
+        e.printStackTrace();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    List<sample.Loads> exciterSW = new ArrayList<sample.Loads>();
+    NodeList loadsNodeList = loadsDocument.getDocumentElement().getChildNodes();
+    for (int i = 0; i < loadsNodeList.getLength(); i++) {        //loop through to get every item and its attributes from the test.xml
+        Node loadsNode = loadsNodeList.item(i);
+        if (loadsNode.getNodeType() == Node.ELEMENT_NODE) {
+            Element loadsElement = (Element) loadsNode;
+
+            SWPID = (loadsElement.getElementsByTagName("PID").item(0).getChildNodes().item(0).getNodeValue());
+            SWPIDDESCRIPTION = (loadsElement.getElementsByTagName("PIDDESCRIPTION").item(0).getChildNodes().item(0).getNodeValue());
+            }
+        if (SWPIDDESCRIPTION.equals(mainExciterSW.getValue()))
+            break;
+        }
+
+
+    }
+
+    public void tpoChange(){
+
+        if(tpo.getText().equals("")){
+            tx_cb.getItems().clear();
+            tx_cb.getItems().add("Select Transmitter");
+            tx_cb.setValue("Select Transmitter");
+            System.out.println("No tpo value!");
+            return;
+        }
+        tx_cb.getItems().clear();
+        tx_cb.getItems().add("Select Transmitter");
+        tx_cb.setValue("Select Transmitter");
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = null;
+        try {
+            builder = factory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+
+        // Load the input XML document, parse it and return an instance of the document class. will need to make this work on any computer somehow.
+        Document document = null;
+        try {
+            document = builder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\test.xml"));
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //refere to Transmitter.java
+        List<sample.Transmitter> transmitters = new ArrayList<sample.Transmitter>();
+        NodeList nodeList = document.getDocumentElement().getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {        //loop through to get every item and its attributes from the test.xml
+            Node node = nodeList.item(i);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element elem = (Element) node;
+                // Get the value of the ID attribute.
+                ID = node.getAttributes().getNamedItem("ID").getNodeValue();// transmitters(i.e. ULXTE-2)
+                // Get the value of all sub-elements.
+                //pa = Integer.parseInt(elem.getElementsByTagName("PA").item(0).getChildNodes().item(0).getNodeValue());//pa modules
+                //int cabinets = Integer.parseInt(elem.getElementsByTagName("Cabinets").item(0).getChildNodes().item(0).getNodeValue());//cabinets
+                //int powerblocks = Integer.parseInt(elem.getElementsByTagName("Powerblocks").item(0).getChildNodes().item(0).getNodeValue());//power blocks
+                //String linesize = elem.getElementsByTagName("Linesize").item(0).getChildNodes().item(0).getNodeValue();//line size
+                powerRating = Double.parseDouble(elem.getElementsByTagName("Power").item(0).getChildNodes().item(0).getNodeValue());
+
+                transmitters.add(new sample.Transmitter(ID, pa, cabinets, powerblocks, linesize, powerRating));//call constructor in Transmitter.java to set values for variables
+                //read transmitter ID's into tx_cb combo box
+
+                if(powerRating > Double.parseDouble(tpo.getText()))
+                    tx_cb.getItems().add(ID);//add each ID(i.e. ULXTE-2) to tx_cb combo box
+
+
             }
         }
     }
 
+}
 

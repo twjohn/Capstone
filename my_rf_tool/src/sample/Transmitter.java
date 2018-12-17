@@ -8,13 +8,15 @@ class Transmitter {
     private int Powerblocks;
     private String Linesize;
     private String filter;
+    private Double powerRating;
 
-    public Transmitter(String ID, int PA, int Cabinets, int Powerblocks, String Linesize) {
+    public Transmitter(String ID, int PA, int Cabinets, int Powerblocks, String Linesize, Double powerRating) {
         this.ID = ID;
         this.PA = PA;
         this.Cabinets = Cabinets;
         this.Powerblocks = Powerblocks;
         this.Linesize = Linesize;
+        this.powerRating = powerRating;
     }
     public String Filters(String filter) {
         return this.filter = filter;

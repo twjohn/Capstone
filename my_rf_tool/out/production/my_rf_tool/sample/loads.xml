@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testloads>
+    <loads ID="5KW">
+        <Power>5</Power>
+    </loads>
+    <loads ID="10KW">
+        <Power>10</Power>
+    </loads>
+    <loads ID="15KW">
+        <Power>15</Power>
+    </loads>
+    <loads ID="25KW">
+        <Power>25</Power>
+    </loads>
+    <loads ID="40KW">
+        <Power>40</Power>
+    </loads>
+    <loads ID="80KW">
+        <Power>80</Power>
+    </loads>
+    <loads ID="160KW">
+        <Power>160</Power>
+    </loads>
+</testloads>
