@@ -52,7 +52,7 @@ public class repStageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        itemReport.getColumns().addAll(numberCol,piddesc,quantity,pid);
+        itemReport.getColumns().addAll(numberCol,pid,piddesc,quantity);
          /***************************************************************
          * retrieve values from main scene and display them onto console*
          * will later make this be put into the tableview for this scene*
@@ -79,10 +79,10 @@ public class repStageController implements Initializable {
             /** create observable array list for table insertion **/
             ObservableList<Report> data = FXCollections.observableArrayList(/** add items to array list **/
                     //new Report();
-                    new Report(count, report.txSelection,report.txSelection),//transmitter info
-                    new Report(count, report.SWPID,report.selectedSWDescription),//exciter software
-                    new Report(count, report.filterPID,report.selectedFilterDescription),//filter info
-                    new Report(count, report.paModulePID,report.selectedPADescription)//pa module info
+                    new Report(report.txSelection,report.txSelection),//transmitter info
+                    new Report(report.SWPID,report.selectedSWDescription),//exciter software
+                    new Report(report.filterPID,report.selectedFilterDescription),//filter info
+                    new Report(report.paModulePID,report.selectedPADescription)//pa module info
                     /** other info to be added here soon **/
             );
 
@@ -107,7 +107,7 @@ public class repStageController implements Initializable {
             });
 
             /**************************************************************/
-            numberCol.setCellValueFactory(new PropertyValueFactory<Report,String>("Count")); /** ties columns and info together for num **/
+            //numberCol.setCellValueFactory(new PropertyValueFactory<Report,String>("Count")); /** ties columns and info together for num **/
 
             itemReport.setItems(data); /** adds data to table **/
 

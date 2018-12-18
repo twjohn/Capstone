@@ -5,19 +5,13 @@ import javafx.beans.property.SimpleStringProperty;
 /** if you add functions here, make sure functions are CAMEL CASE-- property value factory needs this **/
 public class Report {
 
-    int counter;
     private final SimpleStringProperty pid, piddesc;
 
 
-    Report(int num, String pid, String piddesc){
-        this.counter = num;
+    Report(String pid, String piddesc){
         this.pid = new SimpleStringProperty(pid);
         this.piddesc = new SimpleStringProperty(piddesc);
     }
-
-    public final int getCount(){ return counter; }
-
-    public final void setCount(int num){ this.counter = num; }
 
     public final String getPid(){
         return pid.get();
