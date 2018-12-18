@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Transmitters>
+
     <Transmitter ID="ULXTE-2">
         <PA>2</PA >
         <Cabinets>1</Cabinets>
         <Powerblocks>1</Powerblocks>
         <Linesize>1-5/8</Linesize>
+        <Power>1.44</Power>
+
     </Transmitter>
 
     <Transmitter ID="ULXTE-4">
         <PA>4</PA >
         <Cabinets>1</Cabinets>
         <Powerblocks>1</Powerblocks>
-        <Linesize>3-1/8</Linesize>
+        <Linesize>1-5/8</Linesize>
+        <Power>2.88</Power>
+
     </Transmitter>
 
     <Transmitter ID="ULXTE-6">
         <PA>8</PA >
         <Cabinets>1</Cabinets>
         <Powerblocks>1</Powerblocks>
-        <Linesize>3-1//8</Linesize>
+        <Linesize>3-1/8</Linesize>
+        <Power>4.32</Power>
+
     </Transmitter>
 
     <Transmitter ID="ULXTE-8">
@@ -26,6 +33,156 @@
         <Cabinets>1</Cabinets>
         <Powerblocks>1</Powerblocks>
         <Linesize>3-1/8</Linesize>
+        <Power>5.52</Power>
+
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-10">
+        <PA>10</PA >
+        <Cabinets>1</Cabinets>
+        <Powerblocks>1</Powerblocks>
+        <Linesize>3-1/8</Linesize>
+        <Power>6.60</Power>
+
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-12">
+        <PA>12</PA >
+        <Cabinets>1</Cabinets>
+        <Powerblocks>2</Powerblocks>
+        <Linesize>4-1/16</Linesize>
+        <Power>8.5</Power>
+
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-16">
+        <PA>16</PA >
+        <Cabinets>1</Cabinets>
+        <Powerblocks>2</Powerblocks>
+        <Linesize>4-1/16</Linesize>
+
+        <Power>10.8</Power>
+
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-20">
+        <PA>20</PA >
+        <Cabinets>1</Cabinets>
+        <Powerblocks>2</Powerblocks>
+        <Linesize>4-1/16</Linesize>
+
+        <Power>12.9</Power>
+
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-24">
+        <PA>24</PA >
+        <Cabinets>1</Cabinets>
+        <Powerblocks>3</Powerblocks>
+        <Linesize>4-1/16</Linesize>
+
+        <Power>16.1</Power>
+
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-30">
+        <PA>30</PA >
+        <Cabinets>1</Cabinets>
+        <Powerblocks>3</Powerblocks>
+        <Linesize>4-1/16</Linesize>
+
+        <Power>19.2</Power>
+
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-40">
+        <PA>40</PA >
+        <Cabinets>2</Cabinets>
+        <Powerblocks>4</Powerblocks>
+        <Linesize>6-1/8</Linesize>
+
+        <Power>25.3</Power>
+
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-50">
+        <PA>50</PA >
+        <Cabinets>2</Cabinets>
+        <Powerblocks>5</Powerblocks>
+        <Linesize>6-1/8</Linesize>
+
+        <Power>31.7</Power>
+
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-60">
+        <PA>60</PA >
+        <Cabinets>2</Cabinets>
+        <Powerblocks>6</Powerblocks>
+        <Linesize>6-1/8</Linesize>
+
+        <Power>38</Power>
+
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-72">
+        <PA>72</PA >
+        <Cabinets>3</Cabinets>
+        <Powerblocks>9</Powerblocks>
+        <Linesize>6-1/8</Linesize>
+
+        <Power>47.2</Power>
+
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-80">
+        <PA>80</PA >
+        <Cabinets>3</Cabinets>
+        <Powerblocks>8</Powerblocks>
+        <Linesize>6-1/8</Linesize>
+
+        <Power>50.1</Power>
+
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-90">
+        <PA>90</PA >
+        <Cabinets>3</Cabinets>
+        <Powerblocks>9</Powerblocks>
+        <Linesize>6-1/8</Linesize>
+
+        <Power>56.4</Power>
+
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-100">
+        <PA>100</PA >
+        <Cabinets>4</Cabinets>
+        <Powerblocks>10</Powerblocks>
+        <Linesize>7-3/16</Linesize>
+
+        <Power>62.7</Power>
+
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-120">
+        <PA>120</PA >
+        <Cabinets>4</Cabinets>
+        <Powerblocks>12</Powerblocks>
+        <Linesize>7-3/16</Linesize>
+
+        <Power>75.1</Power>
+
+    </Transmitter>
+
+    <Transmitter ID="ULXTE-150">
+        <PA>150</PA >
+        <Cabinets>5</Cabinets>
+        <Powerblocks>15</Powerblocks>
+        <Linesize>8-3/16</Linesize>
+
+        <Power>92.8</Power>
+
     </Transmitter>
 
 </Transmitters>

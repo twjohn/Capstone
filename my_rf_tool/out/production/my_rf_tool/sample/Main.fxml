@@ -70,7 +70,7 @@
               </HBox.margin>
             </TextField>
             <Label text="TPO: " HBox.margin="$x1" />
-            <TextField fx:id="tpo" prefWidth="71.0">
+            <TextField fx:id="tpo" onKeyTyped="#tpoChange" prefWidth="71.0">
               <HBox.margin>
                 <Insets bottom="10.0" left="3.0" right="3.0" top="10.0" />
               </HBox.margin>
@@ -109,25 +109,10 @@
             <ComboBox fx:id="paModules" prefHeight="21.0" prefWidth="190.0" promptText="PA Modules" HBox.margin="$x3">
               <items>
                 <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="TYPE E Band A" />
-                    <String fx:value="TYPE D Band A" />
-                    <String fx:value="TYPE D Band B" />
-                    <String fx:value="TYPE D Band C" />
                 </FXCollections>
               </items>
             </ComboBox>
-            <ComboBox fx:id="exciter" prefHeight="21.0" prefWidth="190.0" promptText="Exciter S.W." HBox.margin="$x3">
-              <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="XTE ATSC 1.0/2.0" />
-                    <String fx:value="XTE ATSC 3.0" />
-                    <String fx:value="XTE DVB-T" />
-                    <String fx:value="XTE ISDB-T" />
-                    <String fx:value="XTE DVB-T2" />
-                    <String fx:value="XTE DTMB" />
-                    <String fx:value="XTE DVB-T2 LITE" />
-                </FXCollections>
-              </items>
+            <ComboBox fx:id="mainExciterSW" prefHeight="21.0" prefWidth="190.0" promptText="Exciter S.W." HBox.margin="$x3">
             </ComboBox>
             <ComboBox fx:id="auxAntFeed" prefHeight="21.0" prefWidth="190.0" promptText="Aux Antenna Feed" HBox.margin="$x3">
               <items>
