@@ -2,28 +2,42 @@ package sample;
 
 import javafx.beans.property.SimpleStringProperty;
 
+/** if you add values here, make sure functions are CAMEL CASE-- property value factory needs this **/
 public class Report {
 
-    private static String pid, piddesc;
+    private repStageController myCount;
+    private final SimpleStringProperty pid, piddesc;
 
-    Report(String pid, String piddesc){
-        this.pid = new String(pid);
-        this.piddesc = new String(piddesc);
+
+    Report(int num, String pid, String piddesc){
+        this.myCount.count = 0;
+        this.pid = new SimpleStringProperty(pid);
+        this.piddesc = new SimpleStringProperty(piddesc);
     }
 
-    public String getpid(){
-        return pid;
+    public final int getCount(){
+        System.out.print(myCount.count);
+        return myCount.count+=1;
     }
 
-    public void setpid(String pid){
-        this.pid = pid;
+    public final void setCount(int num){
+
+        this.myCount.count = num;
     }
 
-    public String getpiddesc(){
-        return piddesc;
+    public final String getPid(){
+        return pid.get();
     }
 
-    public void setpiddesc(String piddesc){
-        this.piddesc = piddesc;
+    public final void setPid(String pid){
+        this.pid.set(pid);
+    }
+
+    public final String getPiddesc(){
+        return piddesc.get();
+    }
+
+    public final void setPiddesc(String piddesc){
+        this.piddesc.set(piddesc);
     }
 }

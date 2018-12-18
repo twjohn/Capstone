@@ -109,10 +109,6 @@
             <ComboBox fx:id="paModules" prefHeight="21.0" prefWidth="190.0" promptText="PA Modules" HBox.margin="$x3">
               <items>
                 <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="TYPE E Band A" />
-                    <String fx:value="TYPE D Band A" />
-                    <String fx:value="TYPE D Band B" />
-                    <String fx:value="TYPE D Band C" />
                 </FXCollections>
               </items>
             </ComboBox>
