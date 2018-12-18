@@ -112,7 +112,7 @@ public class Controller implements Initializable {
             e.printStackTrace();
         }
 
-        /** Load the input XML document, parse it and return an instance of the document class. will need to make this work on any computer somehow **/
+        /** Load the input XML document, parse it and return an instance of the document class. install on computers C drive to work on any computer **/
 
         Document document = null;
         try {
@@ -161,9 +161,9 @@ public class Controller implements Initializable {
                 try {/** when genRep button is clicked, a event occurs and opens a new window, if unable to open, a error is caught **/
 
                     /** get needed product ID's (PID) **/
-                    getSWPID();
+                    getSwPID();
                     getFilterPID();
-                    getPAPID();
+                    getPaPID();
 
                     /** get selected values to pass to new window **/
                     selectedSWDescription = (String)mainExciterSW.getValue();
@@ -197,7 +197,6 @@ public class Controller implements Initializable {
             tpo.requestFocus();
         } else System.out.println(tpo.getText());
     }
-
 
     /** method to check if dual exciter check box is selected returns true if selected **/
     public boolean checkDualExciters() {
@@ -403,7 +402,7 @@ public class Controller implements Initializable {
                 }
             }
         }
-    public void getSWPID(){
+    public void getSwPID(){
 
         DocumentBuilderFactory SWIPFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder SWIPBuilder = null;
@@ -438,7 +437,6 @@ public class Controller implements Initializable {
 
 
     }
-
 
     /** adding filter options and getting PID for selected filter **/
     public void addFilters(){
@@ -523,7 +521,7 @@ public class Controller implements Initializable {
 }
 
     /** adding PA Module options and getting PID for selected Pa Module type **/
-    public void getPAPID(){
+    public void getPaPID(){
     DocumentBuilderFactory PAModuleFactory = DocumentBuilderFactory.newInstance();
     DocumentBuilder PAModuleBuilder = null;
 

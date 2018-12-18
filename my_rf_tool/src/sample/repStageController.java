@@ -1,6 +1,11 @@
 package sample;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -34,11 +40,11 @@ public class repStageController implements Initializable {
 
     public TableView itemReport;
     private Parent parent;
-    public static int count = 0;
+    public int count = 0;
     private Controller report = new Controller();
     TableColumn pid = new TableColumn("Product ID"); /** product id column **/
     TableColumn piddesc = new TableColumn("Product Description"); /** product description column **/
-    TableColumn num = new TableColumn("No."); /** product description column **/
+    TableColumn numberCol = new TableColumn("No."); /** product description column **/
     TableColumn quantity = new TableColumn("Quantity"); /** product description column **/
 
 
@@ -46,7 +52,7 @@ public class repStageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        itemReport.getColumns().addAll(num,piddesc,quantity,pid);
+        itemReport.getColumns().addAll(numberCol,piddesc,quantity,pid);
          /***************************************************************
          * retrieve values from main scene and display them onto console*
          * will later make this be put into the tableview for this scene*
@@ -82,7 +88,26 @@ public class repStageController implements Initializable {
 
             pid.setCellValueFactory(new PropertyValueFactory<Report, String>("Pid")); /** ties columns and info together for pid **/
             piddesc.setCellValueFactory(new PropertyValueFactory<Report,String>("Piddesc")); /** ties columns and info together for piddesc **/
-            num.setCellValueFactory(new PropertyValueFactory<Report,String>("Count")); /** ties columns and info together for piddesc **/
+
+            /** auto increment row number **/
+            numberCol.setCellFactory(col -> {
+                TableCell<Report, Integer> indexCell = new TableCell<>();
+                ReadOnlyObjectProperty<TableRow<Report>> rowProperty = indexCell.tableRowProperty();
+                ObjectBinding<String> rowBinding = Bindings.createObjectBinding(() -> {
+                    TableRow<Report> row = rowProperty.get();
+                    if (row != null) { // can be null during CSS processing
+                        int rowIndex = row.getIndex();
+                        if (rowIndex < row.getTableView().getItems().size())
+                            return Integer.toString(rowIndex+1);
+                    }
+                    return null;
+                }, rowProperty);
+                indexCell.textProperty().bind(rowBinding);
+                return indexCell;
+            });
+
+            /**************************************************************/
+            numberCol.setCellValueFactory(new PropertyValueFactory<Report,String>("Count")); /** ties columns and info together for num **/
 
             itemReport.setItems(data); /** adds data to table **/
 
