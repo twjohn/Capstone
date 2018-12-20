@@ -64,13 +64,13 @@
                 <Insets bottom="10.0" left="10.0" right="3.0" top="10.0" fx:id="x1" />
               </HBox.margin>
             </Label>
-            <TextField fx:id="channel" prefWidth="71.0">
+            <TextField fx:id="channel" onKeyTyped="#channelChanged" prefWidth="71.0">
               <HBox.margin>
                 <Insets bottom="10.0" left="3.0" right="10.0" top="10.0" fx:id="x2" />
               </HBox.margin>
             </TextField>
             <Label text="TPO: " HBox.margin="$x1" />
-            <TextField fx:id="tpo" onKeyTyped="#tpoChange" prefWidth="71.0">
+            <TextField fx:id="tpo" onKeyTyped="#tpoChange_addTX" prefWidth="71.0">
               <HBox.margin>
                 <Insets bottom="10.0" left="3.0" right="3.0" top="10.0" />
               </HBox.margin>
@@ -132,12 +132,12 @@
         </HBox>
         <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="45.0" prefWidth="426.0">
           <children>
-            <ComboBox fx:id="filter" prefHeight="21.0" prefWidth="190.0" promptText="Filter" HBox.margin="$x3">
+            <ComboBox fx:id="filter" prefHeight="21.0" prefWidth="190.0" promptText="Select Filter" HBox.margin="$x3">
               <items>
                 <FXCollections fx:factory="observableArrayList" />
               </items>
             </ComboBox>
-            <ComboBox fx:id="switchPatch" prefHeight="21.0" prefWidth="190.0" promptText="Switch/Patch" HBox.margin="$x3">
+            <ComboBox fx:id="switchPatch" prefHeight="21.0" prefWidth="190.0" promptText="Switch/Patch" HBox.hgrow="SOMETIMES" HBox.margin="$x3">
               <items>
                 <FXCollections fx:factory="observableArrayList" />
               </items>
@@ -149,7 +149,7 @@
             </ComboBox>
           </children>
         </HBox>
-        <Button fx:id="genRep" mnemonicParsing="false" onAction="#genNewRep" prefHeight="28.0" prefWidth="186.0" text="Generate Report" textAlignment="CENTER">
+        <Button fx:id="genRep" mnemonicParsing="false" onMouseClicked="#genNewRep" prefHeight="28.0" prefWidth="186.0" text="Generate Report" textAlignment="CENTER">
                <font>
                   <Font size="14.0" />
                </font>
