@@ -8,39 +8,33 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?scenebuilder-background-color 0xdae5ffff?>
 
-<BorderPane style="-fx-border-width: 3; -fx-background-color: rgb(216, 216, 216); -fx-border-color: rgb(239, 239, 239);" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
-  <bottom>
-    <VBox prefHeight="170.0" prefWidth="590.0" BorderPane.alignment="CENTER">
+<BorderPane fx:id="main" maxHeight="500.0" maxWidth="650.0" style="-fx-border-width: 3; -fx-border-color: rgb(239, 239, 239); -fx-background-color: rgb(255, 252, 252);" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+  <top>
+    <HBox alignment="CENTER" style="-fx-background-color: rgb(239, 239, 239);" BorderPane.alignment="CENTER">
       <children>
-        <Label alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: rgb(239, 239, 239);" text="RF Diagram" textAlignment="CENTER">
-          <font>
-            <Font size="18.0" fx:id="x4" />
-          </font>
-        </Label>
-        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-width: 4; -fx-border-color: rgb(239, 239, 239);">
-          <children>
-            <ImageView fx:id="repImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-          </children>
-        </HBox>
+        <Label contentDisplay="CENTER" text="Gates Air, Inc." HBox.hgrow="ALWAYS">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Label>
       </children>
-      <BorderPane.margin>
-        <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
-      </BorderPane.margin>
-    </VBox>
-  </bottom>
-  <center>
-    <HBox maxWidth="1.7976931348623157E308" prefHeight="372.0" prefWidth="526.9998779296875">
+    </HBox>
+  </top>
+   <bottom>
+    <HBox maxWidth="600.0" prefHeight="372.0" prefWidth="526.9998779296875" BorderPane.alignment="TOP_CENTER">
       <children>
-        <VBox prefHeight="587.0" prefWidth="-1.0" HBox.hgrow="ALWAYS">
+        <VBox alignment="TOP_CENTER" prefHeight="587.0" prefWidth="-1.0" HBox.hgrow="ALWAYS">
           <children>
-            <Label alignment="CENTER" font="$x4" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: rgb(239, 239, 239);" text="Transmitter Information" textAlignment="CENTER" VBox.vgrow="SOMETIMES" />
+            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: rgb(239, 239, 239);" text="Transmitter Information" textAlignment="CENTER" VBox.vgrow="SOMETIMES">
+                     <font>
+                  <Font size="18.0" fx:id="x4" />
+                     </font></Label>
             <Label fx:id="TX_Text" alignment="TOP_CENTER" maxHeight="-1.0" maxWidth="1.7976931348623157E308" style="-fx-background-color: white; -fx-border-color: rgb(239, 239, 239); -fx-border-width: 4;" text="No info to display currently..." VBox.vgrow="SOMETIMES">
               <font>
                 <Font size="20.0" />
@@ -53,9 +47,9 @@
         <Insets right="10.0" top="10.0" />
       </BorderPane.margin>
     </HBox>
-  </center>
-  <left>
-    <VBox alignment="TOP_CENTER" prefHeight="180.0" prefWidth="528.0">
+   </bottom>
+   <center>
+    <VBox alignment="TOP_CENTER" prefHeight="180.0" prefWidth="528.0" BorderPane.alignment="CENTER">
       <children>
         <HBox alignment="CENTER" prefHeight="31.0" prefWidth="395.0">
           <children>
@@ -68,28 +62,37 @@
               <HBox.margin>
                 <Insets bottom="10.0" left="3.0" right="10.0" top="10.0" fx:id="x2" />
               </HBox.margin>
+                     <effect>
+                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                     </effect>
             </TextField>
             <Label text="TPO: " HBox.margin="$x1" />
             <TextField fx:id="tpo" onKeyTyped="#tpoChange_addTX" prefWidth="71.0">
               <HBox.margin>
                 <Insets bottom="10.0" left="3.0" right="3.0" top="10.0" />
               </HBox.margin>
+                     <effect>
+                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                     </effect>
             </TextField>
             <Label text="KW" HBox.margin="$x2" />
           </children>
         </HBox>
         <HBox alignment="CENTER" minHeight="45.0" prefHeight="45.0" prefWidth="527.0000999999975">
           <children>
-            <ComboBox fx:id="tx_cb" blendMode="SRC_OVER" cache="false" disable="false" editable="false" mouseTransparent="false" onAction="#getTXInfo" prefHeight="21.0" prefWidth="190.0" promptText="Select Transmitter">
+            <ComboBox fx:id="tx_cb" blendMode="SRC_OVER" cache="false" disable="false" editable="false" mouseTransparent="false" onAction="#getTXInfo" onContextMenuRequested="#genRepCheck" onMouseClicked="#genRepCheck" onMouseEntered="#genRepCheck" onMousePressed="#genRepCheck" onMouseReleased="#genRepCheck" prefHeight="21.0" prefWidth="190.0" promptText="Select Transmitter">
               <items>
                 <FXCollections fx:factory="observableArrayList" />
               </items>
               <HBox.margin>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" fx:id="x3" />
               </HBox.margin>
+                     <effect>
+                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                     </effect>
             </ComboBox>
-            <CheckBox fx:id="dualExciter" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="190.0" text="Dual Exciters" HBox.margin="$x3" />
-            <ComboBox fx:id="mainAntFeed" prefHeight="31.0" prefWidth="190.0" promptText="Main Antenna Feed" HBox.margin="$x3">
+            <CheckBox fx:id="dualExciter" contentDisplay="CENTER" mnemonicParsing="false" onContextMenuRequested="#genRepCheck" onMouseClicked="#genRepCheck" onMouseEntered="#genRepCheck" onMousePressed="#genRepCheck" onMouseReleased="#genRepCheck" prefWidth="190.0" text="Dual Exciters" HBox.margin="$x3" />
+            <ComboBox fx:id="mainAntFeed" onAction="#genRepCheck" onContextMenuRequested="#genRepCheck" onMouseClicked="#genRepCheck" onMouseEntered="#genRepCheck" onMousePressed="#genRepCheck" onMouseReleased="#genRepCheck" prefHeight="31.0" prefWidth="190.0" promptText="Main Antenna Feed" HBox.margin="$x3">
               <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="1-5/8" />
@@ -101,20 +104,28 @@
                     <String fx:value="8-3/16" />
                 </FXCollections>
               </items>
+                     <effect>
+                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                     </effect>
             </ComboBox>
           </children>
         </HBox>
         <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="45.0" prefWidth="438.0">
           <children>
-            <ComboBox fx:id="paModules" prefHeight="21.0" prefWidth="190.0" promptText="PA Modules" HBox.margin="$x3">
+            <ComboBox fx:id="paModules" onAction="#genRepCheck" onContextMenuRequested="#genRepCheck" onMouseClicked="#genRepCheck" onMouseEntered="#genRepCheck" onMousePressed="#genRepCheck" onMouseReleased="#genRepCheck" prefHeight="21.0" prefWidth="190.0" promptText="PA Modules" HBox.margin="$x3">
               <items>
                 <FXCollections fx:factory="observableArrayList">
                 </FXCollections>
               </items>
+                     <effect>
+                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                     </effect>
             </ComboBox>
-            <ComboBox fx:id="mainExciterSW" prefHeight="21.0" prefWidth="190.0" promptText="Exciter S.W." HBox.margin="$x3">
-            </ComboBox>
-            <ComboBox fx:id="auxAntFeed" prefHeight="21.0" prefWidth="190.0" promptText="Aux Antenna Feed" HBox.margin="$x3">
+            <ComboBox fx:id="mainExciterSW" onAction="#genRepCheck" onContextMenuRequested="#genRepCheck" onMouseClicked="#genRepCheck" onMouseEntered="#genRepCheck" onMousePressed="#genRepCheck" onMouseReleased="#genRepCheck" prefHeight="21.0" prefWidth="190.0" promptText="Exciter S.W." HBox.margin="$x3">
+                     <effect>
+                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                     </effect></ComboBox>
+            <ComboBox fx:id="auxAntFeed" onAction="#genRepCheck" onContextMenuRequested="#genRepCheck" onMouseClicked="#genRepCheck" onMouseEntered="#genRepCheck" onMousePressed="#genRepCheck" onMouseReleased="#genRepCheck" prefHeight="21.0" prefWidth="190.0" promptText="Aux Antenna Feed" HBox.margin="$x3">
               <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="No Aux Antenna" />
@@ -127,25 +138,37 @@
                     <String fx:value="8-3/16" />
                 </FXCollections>
               </items>
+                     <effect>
+                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                     </effect>
             </ComboBox>
           </children>
         </HBox>
         <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="45.0" prefWidth="426.0">
           <children>
-            <ComboBox fx:id="filter" prefHeight="21.0" prefWidth="190.0" promptText="Select Filter" HBox.margin="$x3">
+            <ComboBox fx:id="filter" onAction="#genRepCheck" onContextMenuRequested="#genRepCheck" onMouseClicked="#genRepCheck" onMouseEntered="#genRepCheck" onMousePressed="#genRepCheck" onMouseReleased="#genRepCheck" prefHeight="21.0" prefWidth="190.0" promptText="Select Filter" HBox.margin="$x3">
               <items>
                 <FXCollections fx:factory="observableArrayList" />
               </items>
+                     <effect>
+                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                     </effect>
             </ComboBox>
-            <ComboBox fx:id="switchPatch" prefHeight="21.0" prefWidth="190.0" promptText="Switch/Patch" HBox.hgrow="SOMETIMES" HBox.margin="$x3">
+            <ComboBox fx:id="switchPatch" onAction="#genRepCheck" onContextMenuRequested="#genRepCheck" onMouseClicked="#genRepCheck" onMouseEntered="#genRepCheck" onMousePressed="#genRepCheck" onMouseReleased="#genRepCheck" prefHeight="21.0" prefWidth="190.0" promptText="Switch/Patch" HBox.hgrow="SOMETIMES" HBox.margin="$x3">
               <items>
                 <FXCollections fx:factory="observableArrayList" />
               </items>
+                     <effect>
+                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                     </effect>
             </ComboBox>
-            <ComboBox fx:id="testLoad" prefHeight="21.0" prefWidth="190.0" promptText="Test Load" HBox.margin="$x3">
+            <ComboBox fx:id="testLoad" onAction="#genRepCheck" onContextMenuRequested="#genRepCheck" onDragDone="#genRepCheck" onMouseClicked="#genRepCheck" onMouseEntered="#genRepCheck" onMousePressed="#genRepCheck" onMouseReleased="#genRepCheck" prefHeight="21.0" prefWidth="190.0" promptText="Test Load" HBox.margin="$x3">
               <items>
                 <FXCollections fx:factory="observableArrayList" />
               </items>
+                     <effect>
+                        <DropShadow height="5.0" radius="2.0" width="5.0" />
+                     </effect>
             </ComboBox>
           </children>
         </HBox>
@@ -155,7 +178,10 @@
                </font>
                <VBox.margin>
                   <Insets top="10.0" />
-               </VBox.margin></Button>
+               </VBox.margin>
+               <effect>
+                  <DropShadow height="5.0" radius="2.0" width="5.0" />
+               </effect></Button>
         <Label id="errCatcher" fx:id="errCatcher" alignment="CENTER" prefHeight="20.0" prefWidth="453.0" textAlignment="CENTER">
           <font>
             <Font size="14.0" />
@@ -163,12 +189,8 @@
         </Label>
       </children>
     </VBox>
-  </left>
-  <top>
-    <HBox alignment="CENTER" style="-fx-background-color: rgb(239, 239, 239);" BorderPane.alignment="CENTER">
-      <children>
-        <Label contentDisplay="CENTER" text="Gates Air, Inc." HBox.hgrow="ALWAYS" />
-      </children>
-    </HBox>
-  </top>
+   </center>
+   <effect>
+      <DropShadow />
+   </effect>
 </BorderPane>

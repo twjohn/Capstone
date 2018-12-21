@@ -16,7 +16,8 @@ public static void main(String[] args)
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
         primaryStage.setTitle("RF Tool");
-        primaryStage.setScene(new Scene(root, 1200, 675));
+        primaryStage.setScene(new Scene(root, 800, 475));
+        primaryStage.setResizable(false);
         primaryStage.show();
         }
 }
