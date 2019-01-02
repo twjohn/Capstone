@@ -116,15 +116,95 @@ public class repStageController implements Initializable {
             itemReport.setItems(data); /** adds data to table **/
 
             /** initial coordinates for diagram objects **/
-            double vPos=500, hPos=100.0;
+            double vPos=800, hPos=100.0;
             GraphicsContext gc = diagram.getGraphicsContext2D();
-            for(int i = 0; i < report.txSelectionCabinets; i++) {
+            for(int i=0; i<report.txSelectionCabinets; i++) {
                 /** far right side of first cabinet = 150px **/
-                gc.strokeRect(hPos, vPos, 50, 100);
+
+                /** double array argument clarification
+                 * first arr in strokePolygon is for horizontal position
+                 *                      index 0 = left
+                 *                      index 1 = center
+                 *                      index 2 = right
+                 * second arr in strokePolygon is for vertical alignment
+                 *                      index 0 = left
+                 *                      index 1 = center
+                 *                      index 2 = right
+                 * last integer argument in for number of points, in this case, 3 for a triangle
+                 */
+                gc.strokePolygon(new double[]{hPos-25, hPos+25, hPos+75}, new double[]{vPos+100, vPos, vPos+100}, 3);
                 gc.setLineWidth(1.0);
-                gc.strokeLine(hPos+25,vPos,hPos+25,vPos-75);
+                gc.strokeLine(hPos+25,vPos,hPos+25,vPos-25);
+
+                /** low pass + pre coupler **/
+                gc.strokeRect(hPos,vPos-125,50,100);
+                gc.strokeRect(hPos,vPos-175,50,50);
+                gc.strokeLine(hPos+20,vPos-50,hPos+20,vPos-85);
+                gc.strokeLine(hPos+20,vPos-85,hPos+40,vPos-100);
+                //gc.strokeLine(hPos-10,vPos - 137.5);
+
+                /** pre coupler to mask filter **/
+                gc.strokeLine(hPos+25,vPos-125,hPos+25,vPos-200);
+
+                /** mask filter + post coupler **/
+                gc.strokeRect(hPos,vPos-300,50,100);
+                gc.strokeRect(hPos,vPos-350,50,50);
+                gc.strokeLine(hPos+20,vPos-262.5,hPos+40,vPos-287.5);
+                gc.strokeLine(hPos+20,vPos-237.5,hPos+20,vPos-262.5);
+                gc.strokeLine(hPos+20,vPos-237.5,hPos+40,vPos-212.5);
+
+                /** pre coupler and onward **/
+                gc.strokeLine(hPos+25,vPos-300,hPos+25,vPos-375);
                 gc.stroke();
-                hPos += +100;
+
+
+                /** hybrid combiners **/
+                gc.strokeLine(hPos+25,vPos-375,hPos+25,vPos-400);
+                if(report.txSelectionCabinets > i+1)
+                    if(((i+1 == 1) && i+1 != 4)) {
+                        gc.strokeRect(hPos, vPos - 450, 175, 75);
+                        gc.strokeLine(hPos+25,vPos-400,hPos+150,vPos-425);
+                        gc.strokeLine(hPos + 25, vPos - 425, hPos + 25, vPos -475);
+                    }
+
+                /** conditions for line crossing in hybrid combiners **/
+
+                if(i+1 == 2) {
+                    gc.strokeLine(hPos + 25, vPos - 400, hPos - 100, vPos - 425);
+                    gc.strokeLine(hPos + 25, vPos - 425, hPos + 25, vPos -475);
+                }
+
+                if(report.txSelectionCabinets == 4) {
+                    if (i+1==3) {
+                        gc.strokeLine(hPos + 25, vPos - 400, hPos + 150, vPos - 425);
+                        gc.strokeLine(hPos + 25, vPos - 425, hPos + 25, vPos -475);
+                    }
+                    if(i+1==4) {
+                        gc.strokeLine(hPos + 25, vPos - 400, hPos - 100, vPos - 425);
+                        gc.strokeLine(hPos + 25, vPos - 425, hPos + 25, vPos -475);
+                    }
+                }
+
+                if(report.txSelectionCabinets == 5) {
+                    if (i+1==4) {
+                        gc.strokeLine(hPos + 25, vPos - 400, hPos + 150, vPos - 425);
+                        gc.strokeLine(hPos + 25, vPos - 425, hPos + 25, vPos -475);
+                    }
+                    if(i+1==5) {
+                        gc.strokeLine(hPos + 25, vPos - 400, hPos - 100, vPos - 425);
+                        gc.strokeLine(hPos + 25, vPos - 425, hPos + 25, vPos -475);
+                    }
+                }
+                /*******************************************************************************/
+
+
+                /** condition to place hybrid combiners when cabinets = 4 or cabinets = 5 **/
+                if((i+1 == 5) || (report.txSelectionCabinets == 4 && i+1 == 4)) {
+                    gc.strokeRect(hPos - 125, vPos - 450, 175, 75);
+                }
+
+                /** increment horizontal position **/
+                hPos += 125;
             }
         }
     }
