@@ -9,11 +9,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -22,7 +21,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import javax.swing.text.AbstractDocument;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,8 +36,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.concurrent.*;
 
 
 public class Controller implements Initializable {
@@ -50,10 +51,11 @@ public class Controller implements Initializable {
     /** FXML elements **/
     public Label TX_Text, errCatcher;
     public Button genRep;
-    public ComboBox tx_cb, paModules, mainExciterSW, filter, switchPatch, testLoad;
+    public ComboBox tx_cb, paModules, mainExciterSW, filter, switchPatch, testLoad, mainAntFeed, auxAntFeed;
     public TextField channel, tpo;
     public ImageView repImage;
     public CheckBox dualExciter;
+    public BorderPane main;
 
     /** vars to hold various info about information needed **/
     private static String ID, linesize;
@@ -67,10 +69,12 @@ public class Controller implements Initializable {
 
     /** selected values-- values passed to new scene-- report **/
     public static String selectedSWDescription, selectedFilterDescription, selectedPADescription, txSelection;
+    public static int txSelectionCabinets;
 
     /** override function to run things needed at run time(combobox population, textbox input checker, etc.) **/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
 
         //keeps height and width from looking abnormal on the switch/patch dropdown
         switchPatch.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
@@ -136,10 +140,7 @@ public class Controller implements Initializable {
     public void genNewRep() {
 
         if (tx_cb.getValue() == null || filter.getValue() == null || switchPatch.getValue() == null) {
-            //conditional to tell if enough information was provide to construct a rf diagram
-            System.out.println("Not enough information available to generate proper report...");
-            errCatcher.setTextFill(Color.web("#ff0000"));
-            errCatcher.setText("Not enough information available to generate proper report...");
+            //conditional to tell if enough information was provide to construct a rf diagram/report
             return;
         } else{
                 try {/** when genRep button is clicked, a event occurs and opens a new window, if unable to open, a error is caught **/
@@ -154,10 +155,10 @@ public class Controller implements Initializable {
                     selectedFilterDescription = (String)filter.getValue();
                     selectedPADescription = (String)paModules.getValue();
                     txSelection = (String)tx_cb.getValue();
-
+                    txSelectionCabinets = cabinets;
                     FXMLLoader fxmlLoader = new FXMLLoader();
                     fxmlLoader.setLocation(getClass().getResource("repStage.fxml"));
-                    Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+                    Scene scene = new Scene(fxmlLoader.load(), 700, 800);
                     Stage stage = new Stage();
                     stage.setTitle("Generated report");
                     stage.setScene(scene);
@@ -167,8 +168,6 @@ public class Controller implements Initializable {
                     logger.log(Level.SEVERE, "Failed to create generate report.", e);
                 }
             /** displays and opens new window when proper input is detected for all cases **/
-            errCatcher.setTextFill(Color.web("#00bc4e"));
-            errCatcher.setText("Report generated...");
             return;
         }
 
@@ -191,6 +190,18 @@ public class Controller implements Initializable {
     /** event for when a transmitter is picked from tx_cb combo box **/
     public void getTXInfo() {
 
+        filter.getItems().clear();
+        filter.setPromptText("Select Filter");
+        filter.setButtonCell(new ListCell<String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null)
+                    setText("Select Filter");
+                else
+                    setText(item);
+            }
+        });
         tpoCheck(); //check tpo
         channelNumber = Double.parseDouble(channel.getText());//set channelNumber
         System.out.println(channelNumber);
@@ -562,6 +573,7 @@ public class Controller implements Initializable {
     /** event for when the tpo is changed-- checks for compatibility with transmitter **/
     public void tpoChange_addTX(){
 
+
         if(tpo.getText().equals("")|| tpo.getText().equals("0")){ // prevent input of anything 0 and below and blank
             tx_cb.getItems().clear();
             tx_cb.setPromptText("Select Transmitter");
@@ -605,6 +617,7 @@ public class Controller implements Initializable {
                     setText(item);
             }
         });
+        genRep.setDisable(true);// disable generate report button we tpo is changed(this function resets some values and makes them null-- error handler
         filter.getItems().clear();
         filter.setPromptText("Select Filter");
         filter.setButtonCell(new ListCell<String>() {
@@ -653,16 +666,23 @@ public class Controller implements Initializable {
                 }
             }
         }
-
     }
-
     /** event for when a value entered for channel text box is 1 or blank or greater than 83- changes value to 1 as default **/
     public void channelChanged(){
         if(channel.getText().equals("") || Integer.parseInt(channel.getText())<1 || Integer.parseInt(channel.getText())>83){
             channel.setText("1");
              return;
         }
-
+    }
+    /** event that checks if all information is filled out **/
+    public void genRepCheck(){
+        if (tx_cb.getValue() == null || paModules.getValue() == null || mainExciterSW.getValue() == null
+                || filter.getValue() == null || switchPatch.getValue() == null || testLoad.getValue() == null || mainAntFeed.getValue() == null) {
+            genRep.setDisable(true);
+        }
+        else {
+            genRep.setDisable(false);
+        }
     }
 }
 
