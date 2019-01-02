@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
 <TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.repStageController">
@@ -19,10 +18,7 @@
     </Tab>
     <Tab fx:id="diagTab" text="RF Flow Diagram">
          <content>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <Canvas height="362.0" layoutX="6.0" layoutY="5.0" width="586.0" />
-               </children></AnchorPane>
+            <Canvas fx:id="diagram" height="1080.0" width="1920.0" />
          </content>
     </Tab>
   </tabs>

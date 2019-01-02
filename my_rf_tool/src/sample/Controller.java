@@ -69,6 +69,7 @@ public class Controller implements Initializable {
 
     /** selected values-- values passed to new scene-- report **/
     public static String selectedSWDescription, selectedFilterDescription, selectedPADescription, txSelection;
+    public static int txSelectionCabinets;
 
     /** override function to run things needed at run time(combobox population, textbox input checker, etc.) **/
     @Override
@@ -154,10 +155,10 @@ public class Controller implements Initializable {
                     selectedFilterDescription = (String)filter.getValue();
                     selectedPADescription = (String)paModules.getValue();
                     txSelection = (String)tx_cb.getValue();
-
+                    txSelectionCabinets = cabinets;
                     FXMLLoader fxmlLoader = new FXMLLoader();
                     fxmlLoader.setLocation(getClass().getResource("repStage.fxml"));
-                    Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+                    Scene scene = new Scene(fxmlLoader.load(), 700, 800);
                     Stage stage = new Stage();
                     stage.setTitle("Generated report");
                     stage.setScene(scene);

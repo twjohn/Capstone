@@ -15,6 +15,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
@@ -38,6 +40,7 @@ import java.util.ResourceBundle;
 public class repStageController implements Initializable {
 
     public TableView itemReport;
+    public Canvas diagram;
     private Parent parent;
 
 
@@ -111,6 +114,18 @@ public class repStageController implements Initializable {
             /**************************************************************/
 
             itemReport.setItems(data); /** adds data to table **/
+
+            /** initial coordinates for diagram objects **/
+            double vPos=500, hPos=100.0;
+            GraphicsContext gc = diagram.getGraphicsContext2D();
+            for(int i = 0; i < report.txSelectionCabinets; i++) {
+                /** far right side of first cabinet = 150px **/
+                gc.strokeRect(hPos, vPos, 50, 100);
+                gc.setLineWidth(1.0);
+                gc.strokeLine(hPos+25,vPos,hPos+25,vPos-75);
+                gc.stroke();
+                hPos += +100;
+            }
         }
     }
 }
