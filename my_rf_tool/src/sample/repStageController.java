@@ -1,5 +1,6 @@
 package sample;
 
+import com.sun.javafx.geom.Rectangle;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -13,12 +14,14 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.w3c.dom.Document;
@@ -36,6 +39,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static javafx.stage.Screen.getPrimary;
 
 public class repStageController implements Initializable {
 
@@ -116,10 +121,21 @@ public class repStageController implements Initializable {
             itemReport.setItems(data); /** adds data to table **/
 
             /** initial coordinates for diagram objects **/
-            double vPos=800, hPos=100.0;
+
+            double vPos=1100, hPos=500;
+            /**
+            if(report.txSelectionCabinets==1)
+                hPos = 700;
+            else if(report.txSelectionCabinets==2)
+                hPos = 650;
+            else if(report.txSelectionCabinets==3)
+                hPos = 600;
+            else if(report.txSelectionCabinets==4)
+                hPos = 550;
+                **/
+
             GraphicsContext gc = diagram.getGraphicsContext2D();
             for(int i=0; i<report.txSelectionCabinets; i++) {
-                /** far right side of first cabinet = 150px **/
 
                 /** double array argument clarification
                  * first arr in strokePolygon is for horizontal position
@@ -133,25 +149,71 @@ public class repStageController implements Initializable {
                  * last integer argument in for number of points, in this case, 3 for a triangle
                  */
                 gc.strokePolygon(new double[]{hPos-25, hPos+25, hPos+75}, new double[]{vPos+100, vPos, vPos+100}, 3);
+                Label cabinetNumber = new Label(Integer.toString(report.txSelectionCabinets));
+                cabinetNumber.setTranslateY(hPos+50);
+                gc.strokeText(Integer.toString(i+1),hPos+20,vPos+70);
                 gc.setLineWidth(1.0);
                 gc.strokeLine(hPos+25,vPos,hPos+25,vPos-25);
 
                 /** low pass + pre coupler **/
-                gc.strokeRect(hPos,vPos-125,50,100);
-                gc.strokeRect(hPos,vPos-175,50,50);
-                gc.strokeLine(hPos+20,vPos-50,hPos+20,vPos-85);
-                gc.strokeLine(hPos+20,vPos-85,hPos+40,vPos-100);
-                //gc.strokeLine(hPos-10,vPos - 137.5);
+                gc.strokeRect(hPos,vPos-125,50,100);/** low pass rectangle **/
+                gc.strokeRect(hPos,vPos-175,50,50);/** coupler square **/
+
+                    /** low pass details **/
+                    gc.strokeLine(hPos+20,vPos-50,hPos+20,vPos-85);
+                    gc.strokeLine(hPos+20,vPos-85,hPos+40,vPos-100);
+
+                    /** pre coupler details  bottom left**/
+                    gc.strokeLine(hPos-10,vPos-137.5, hPos+12.5,vPos-137.5);
+                    gc.strokeLine(hPos+12.5,vPos-137.5,hPos+12.5,vPos-142.5);
+                    gc.strokeLine(hPos+12.5,vPos-142.5,hPos+7.5,vPos-142.5);
+
+                    /** pre coupler details  top left**/
+                    gc.strokeLine(hPos-10,vPos-155, hPos+12.5,vPos-155);
+                    gc.strokeLine(hPos+12.5,vPos-155,hPos+12.5,vPos-160);
+                    gc.strokeLine(hPos+12.5,vPos-160,hPos+7.5,vPos-160);
+
+                    /** pre coupler details bottom right **/
+                    gc.strokeLine(hPos+60,vPos-142.5, hPos+37.5,vPos-142.5);
+                    gc.strokeLine(hPos+37.5,vPos-142.5,hPos+37.5,vPos-137.5);
+                    gc.strokeLine(hPos+37.5,vPos-137.5,hPos+42.5,vPos-137.5);
+
+                    /** pre coupler details top right **/
+                    gc.strokeLine(hPos+60,vPos-155, hPos+37.5,vPos-155);
+                    gc.strokeLine(hPos+37.5,vPos-155,hPos+37.5,vPos-160);
+                    gc.strokeLine(hPos+37.5,vPos-160,hPos+42.5,vPos-160);
 
                 /** pre coupler to mask filter **/
                 gc.strokeLine(hPos+25,vPos-125,hPos+25,vPos-200);
 
                 /** mask filter + post coupler **/
-                gc.strokeRect(hPos,vPos-300,50,100);
-                gc.strokeRect(hPos,vPos-350,50,50);
-                gc.strokeLine(hPos+20,vPos-262.5,hPos+40,vPos-287.5);
-                gc.strokeLine(hPos+20,vPos-237.5,hPos+20,vPos-262.5);
-                gc.strokeLine(hPos+20,vPos-237.5,hPos+40,vPos-212.5);
+                gc.strokeRect(hPos,vPos-300,50,100);/** mask filter rectangle square **/
+                gc.strokeRect(hPos,vPos-350,50,50);/** coupler square **/
+
+                    /** mask filter details **/
+                    gc.strokeLine(hPos+20,vPos-262.5,hPos+40,vPos-287.5);
+                    gc.strokeLine(hPos+20,vPos-237.5,hPos+20,vPos-262.5);
+                    gc.strokeLine(hPos+20,vPos-237.5,hPos+40,vPos-212.5);
+
+                    /** post coupler details bottom left **/
+                    gc.strokeLine(hPos-10,vPos-312.5, hPos+12.5,vPos-312.5);
+                    gc.strokeLine(hPos+12.5,vPos-312.5,hPos+12.5,vPos-317.5);
+                    gc.strokeLine(hPos+12.5,vPos-317.5,hPos+7.5,vPos-317.5);
+
+                    /** post coupler details top left **/
+                    gc.strokeLine(hPos-10,vPos-330, hPos+12.5,vPos-330);
+                    gc.strokeLine(hPos+12.5,vPos-330,hPos+12.5,vPos-335);
+                    gc.strokeLine(hPos+12.5,vPos-335,hPos+7.5,vPos-335);
+
+                    /** post coupler details bottom right **/
+                    gc.strokeLine(hPos+60,vPos-317.5, hPos+37.5,vPos-317.5);
+                    gc.strokeLine(hPos+37.5,vPos-317.5,hPos+37.5,vPos-312.5);
+                    gc.strokeLine(hPos+37.5,vPos-312.5,hPos+42.5,vPos-312.5);
+
+                    /** post coupler details top right **/
+                    gc.strokeLine(hPos+60,vPos-330, hPos+37.5,vPos-330);
+                    gc.strokeLine(hPos+37.5,vPos-330,hPos+37.5,vPos-335);
+                    gc.strokeLine(hPos+37.5,vPos-335,hPos+42.5,vPos-335);
 
                 /** pre coupler and onward **/
                 gc.strokeLine(hPos+25,vPos-300,hPos+25,vPos-375);
@@ -203,7 +265,10 @@ public class repStageController implements Initializable {
                     gc.strokeRect(hPos - 125, vPos - 450, 175, 75);
                 }
 
-                /** increment horizontal position **/
+                /** increment horizontal position
+                 *  incrementing this var allows for other cabinets, couplers, combiners, etc to be
+                 *  placed in appropriate horizontal positions
+                 **/
                 hPos += 125;
             }
         }

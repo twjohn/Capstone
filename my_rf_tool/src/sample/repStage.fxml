@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableView?>
@@ -18,7 +19,15 @@
     </Tab>
     <Tab fx:id="diagTab" text="RF Flow Diagram">
          <content>
-            <Canvas fx:id="diagram" height="1080.0" width="1920.0" />
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <center>
+                  <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <content>
+                        <Canvas fx:id="diagram" height="1300.0" width="1600.0" />
+                     </content>
+                  </ScrollPane>
+               </center>
+            </BorderPane>
          </content>
     </Tab>
   </tabs>

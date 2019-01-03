@@ -162,6 +162,7 @@ public class Controller implements Initializable {
                     Stage stage = new Stage();
                     stage.setTitle("Generated report");
                     stage.setScene(scene);
+                    stage.setMaximized(true);
                     stage.show();
                 } catch (IOException e) {//catch error opening window
                     Logger logger = Logger.getLogger(getClass().getName());
