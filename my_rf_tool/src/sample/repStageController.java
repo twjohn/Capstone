@@ -141,8 +141,6 @@ public class repStageController implements Initializable {
                  * last integer argument in for number of points, in this case, 3 for a triangle
                  */
                 gc.strokePolygon(new double[]{hPos-25, hPos+25, hPos+75}, new double[]{vPos+100, vPos, vPos+100}, 3);
-                Label cabinetNumber = new Label(Integer.toString(report.txSelectionCabinets));
-                cabinetNumber.setTranslateY(hPos+50);
                 gc.strokeText(Integer.toString(i+1),hPos+20,vPos+70);
                 gc.strokeLine(hPos+25,vPos,hPos+25,vPos-25);
 
@@ -212,7 +210,9 @@ public class repStageController implements Initializable {
 
 
                 /** hybrid combiners **/
-                gc.strokeLine(hPos+25,vPos-375,hPos+25,vPos-400);
+                if(report.txSelectionCabinets!=1)
+                    gc.strokeLine(hPos+25,vPos-375,hPos+25,vPos-400);
+                
                 if(report.txSelectionCabinets > i+1)/** correctly place combiners when there's more than 1 cabinet **/
                     if((i+1 == 1)) {
                         gc.strokeRect(hPos, vPos-450, 175, 75);
@@ -235,13 +235,121 @@ public class repStageController implements Initializable {
 
                 if(i+1 == 2) {
                     gc.strokeLine(hPos+25, vPos-400, hPos-100, vPos-425);
-                    gc.strokeLine(hPos+25, vPos-425, hPos+25, vPos-475);
+                    gc.strokeLine(hPos+25, vPos-425, hPos+25, vPos-500);
+                    if(report.txSelectionCabinets == 2){/**add coupler to left side of combiner when number of cabinets = 2 **/
+                        gc.strokeRect(hPos,vPos-500,50,50);/** coupler square **/
+                        /** post coupler details  bottom left**/
+                        gc.strokeLine(hPos-10,vPos-462.5, hPos+12.5,vPos-462.5);
+                        gc.strokeLine(hPos+12.5,vPos-462.5,hPos+12.5,vPos-467.5);
+                        gc.strokeLine(hPos+12.5,vPos-467.5,hPos+7.5,vPos-467.5);
+
+                        /** post coupler details  top left**/
+                        gc.strokeLine(hPos-10,vPos-481, hPos+12.5,vPos-481);
+                        gc.strokeLine(hPos+12.5,vPos-481,hPos+12.5,vPos-486);
+                        gc.strokeLine(hPos+12.5,vPos-486,hPos+7.5,vPos-486);
+
+                        /** post coupler details bottom right **/
+                        gc.strokeLine(hPos+60,vPos-467.5, hPos+37.5,vPos-467.5);
+                        gc.strokeLine(hPos+37.5,vPos-467.5,hPos+37.5,vPos-462.5);
+                        gc.strokeLine(hPos+37.5,vPos-462.5,hPos+42.5,vPos-462.5);
+
+                        /** post coupler details top right **/
+                        gc.strokeLine(hPos+60,vPos-481, hPos+37.5,vPos-481);
+                        gc.strokeLine(hPos+37.5,vPos-481,hPos+37.5,vPos-486);
+                        gc.strokeLine(hPos+37.5,vPos-486,hPos+42.5,vPos-486);
+
+                    }
                 }
 
+                if(report.txSelectionCabinets == 3){
+                    if(i+1==2){
+                        gc.strokeRect(hPos, vPos-550, 175, 75);/**combiner rectangle **/
+                        gc.strokeLine(hPos+25, vPos-500, hPos+150, vPos-525);
+                        gc.strokeLine(hPos+25, vPos-525, hPos+25, vPos-600);
+
+                        gc.strokeRect(hPos,vPos-600,50,50);/** coupler square **/
+                        /** post coupler details  bottom left**/
+                        gc.strokeLine(hPos-10,vPos-562.5, hPos+12.5,vPos-562.5);
+                        gc.strokeLine(hPos+12.5,vPos-562.5,hPos+12.5,vPos-567.5);
+                        gc.strokeLine(hPos+12.5,vPos-567.5,hPos+7.5,vPos-567.5);
+
+                        /** post coupler details  top left**/
+                        gc.strokeLine(hPos-10,vPos-581, hPos+12.5,vPos-581);
+                        gc.strokeLine(hPos+12.5,vPos-581,hPos+12.5,vPos-586);
+                        gc.strokeLine(hPos+12.5,vPos-586,hPos+7.5,vPos-586);
+
+                        /** post coupler details bottom right **/
+                        gc.strokeLine(hPos+60,vPos-567.5, hPos+37.5,vPos-567.5);
+                        gc.strokeLine(hPos+37.5,vPos-567.5,hPos+37.5,vPos-562.5);
+                        gc.strokeLine(hPos+37.5,vPos-562.5,hPos+42.5,vPos-562.5);
+
+                        /** post coupler details top right **/
+                        gc.strokeLine(hPos+60,vPos-581, hPos+37.5,vPos-581);
+                        gc.strokeLine(hPos+37.5,vPos-581,hPos+37.5,vPos-586);
+                        gc.strokeLine(hPos+37.5,vPos-586,hPos+42.5,vPos-586);
+                    }
+                    if(i+1==3) {/** draw line from cabinet 3 to combiner **/
+                        gc.strokeLine(hPos + 25, vPos - 400, hPos + 25, vPos - 500);
+                        gc.strokeLine(hPos+25, vPos-500, hPos-100, vPos-525);
+                        gc.strokeLine(hPos+25, vPos-525, hPos+25, vPos-575);
+
+                        /** line to reject load **/
+                        gc.strokeLine(hPos+25,vPos-575,hPos+75, vPos-575);
+                        /** reject load **/
+                        gc.strokeLine(hPos+75,vPos-575,hPos+80, vPos-595);
+                        gc.strokeLine(hPos+80,vPos-595,hPos+85, vPos-555);
+                        gc.strokeLine(hPos+85,vPos-555,hPos+95, vPos-595);
+                        gc.strokeLine(hPos+95,vPos-595,hPos+105, vPos-555);
+                        gc.strokeLine(hPos+105,vPos-555,hPos+115, vPos-595);
+                        gc.strokeLine(hPos+115,vPos-595,hPos+125, vPos-555);
+                        gc.strokeLine(hPos+125,vPos-555,hPos+135, vPos-595);
+                        gc.strokeLine(hPos+135,vPos-595,hPos+140, vPos-575);
+                    }
+                }
                 if(report.txSelectionCabinets == 4) {
+                    if(i+1==2){
+                        gc.strokeRect(hPos, vPos-550, 175, 75);/**combiner rectangle **/
+                        gc.strokeLine(hPos+25, vPos-500, hPos+150, vPos-525);
+                        gc.strokeLine(hPos+25, vPos-525, hPos+25, vPos-600);
+
+                        gc.strokeRect(hPos,vPos-600,50,50);/** coupler square **/
+                        /** post coupler details  bottom left**/
+                        gc.strokeLine(hPos-10,vPos-562.5, hPos+12.5,vPos-562.5);
+                        gc.strokeLine(hPos+12.5,vPos-562.5,hPos+12.5,vPos-567.5);
+                        gc.strokeLine(hPos+12.5,vPos-567.5,hPos+7.5,vPos-567.5);
+
+                        /** post coupler details  top left**/
+                        gc.strokeLine(hPos-10,vPos-581, hPos+12.5,vPos-581);
+                        gc.strokeLine(hPos+12.5,vPos-581,hPos+12.5,vPos-586);
+                        gc.strokeLine(hPos+12.5,vPos-586,hPos+7.5,vPos-586);
+
+                        /** post coupler details bottom right **/
+                        gc.strokeLine(hPos+60,vPos-567.5, hPos+37.5,vPos-567.5);
+                        gc.strokeLine(hPos+37.5,vPos-567.5,hPos+37.5,vPos-562.5);
+                        gc.strokeLine(hPos+37.5,vPos-562.5,hPos+42.5,vPos-562.5);
+
+                        /** post coupler details top right **/
+                        gc.strokeLine(hPos+60,vPos-581, hPos+37.5,vPos-581);
+                        gc.strokeLine(hPos+37.5,vPos-581,hPos+37.5,vPos-586);
+                        gc.strokeLine(hPos+37.5,vPos-586,hPos+42.5,vPos-586);
+                    }
                     if (i+1==3) {
                         gc.strokeLine(hPos+25, vPos-400, hPos+150, vPos-425);
-                        gc.strokeLine(hPos+25, vPos-425, hPos+25, vPos-475);
+                        gc.strokeLine(hPos+25, vPos-425, hPos+25, vPos-500);
+                        gc.strokeLine(hPos+25, vPos-500, hPos-100, vPos-525);
+                        gc.strokeLine(hPos+25, vPos-525, hPos+25, vPos-575);
+
+                        /** line to reject load **/
+                        gc.strokeLine(hPos+25,vPos-575,hPos+75, vPos-575);
+                        /** reject load **/
+                        gc.strokeLine(hPos+75,vPos-575,hPos+80, vPos-595);
+                        gc.strokeLine(hPos+80,vPos-595,hPos+85, vPos-555);
+                        gc.strokeLine(hPos+85,vPos-555,hPos+95, vPos-595);
+                        gc.strokeLine(hPos+95,vPos-595,hPos+105, vPos-555);
+                        gc.strokeLine(hPos+105,vPos-555,hPos+115, vPos-595);
+                        gc.strokeLine(hPos+115,vPos-595,hPos+125, vPos-555);
+                        gc.strokeLine(hPos+125,vPos-555,hPos+135, vPos-595);
+                        gc.strokeLine(hPos+135,vPos-595,hPos+140, vPos-575);
                     }
                     if(i+1==4) {
                         gc.strokeLine(hPos+25, vPos-400, hPos-100, vPos-425);
@@ -257,14 +365,76 @@ public class repStageController implements Initializable {
                         gc.strokeLine(hPos+115,vPos-495,hPos+125, vPos-455);
                         gc.strokeLine(hPos+125,vPos-455,hPos+135, vPos-495);
                         gc.strokeLine(hPos+135,vPos-495,hPos+140, vPos-475);
-
                     }
                 }
 
                 if(report.txSelectionCabinets == 5) {
+                    if(i+1==2){
+                        gc.strokeRect(hPos, vPos-550, 175, 75);/**combiner rectangle **/
+                        gc.strokeLine(hPos+25, vPos-500, hPos+150, vPos-525);
+                        gc.strokeLine(hPos+25, vPos-525, hPos+25, vPos-575);
+
+                        /** line to reject load **/
+                        gc.strokeLine(hPos+25,vPos-575,hPos-25, vPos-575);
+                        /** reject load **/
+                        gc.strokeLine(hPos-25,vPos-575,hPos-30,vPos-595);
+                        gc.strokeLine(hPos-30,vPos-595,hPos-40,vPos-555);
+                        gc.strokeLine(hPos-40,vPos-555,hPos-50,vPos-595);
+                        gc.strokeLine(hPos-50,vPos-595,hPos-60,vPos-555);
+                        gc.strokeLine(hPos-60,vPos-555,hPos-70,vPos-595);
+                        gc.strokeLine(hPos-70,vPos-595,hPos-80,vPos-555);
+                        gc.strokeLine(hPos-80,vPos-555,hPos-90,vPos-595);
+                        gc.strokeLine(hPos-90,vPos-595,hPos-95,vPos-575);
+                    }
+                    if(i+1==3){
+                        gc.strokeLine(hPos + 25, vPos - 400, hPos + 25, vPos - 500);
+                        gc.strokeLine(hPos+25, vPos-500, hPos-100, vPos-525);
+                        gc.strokeLine(hPos+25, vPos-525, hPos+25, vPos-600);
+
+                        gc.strokeRect(hPos, vPos-650, 175, 75);/**combiner rectangle **/
+                        gc.strokeLine(hPos+25, vPos-600, hPos+150, vPos-625);
+                        gc.strokeLine(hPos+25, vPos-625, hPos+25, vPos-700);
+
+                        gc.strokeRect(hPos,vPos-700,50,50);/** coupler square **/
+                        /** post coupler details  bottom left**/
+                        gc.strokeLine(hPos-10,vPos-662.5, hPos+12.5,vPos-662.5);
+                        gc.strokeLine(hPos+12.5,vPos-662.5,hPos+12.5,vPos-667.5);
+                        gc.strokeLine(hPos+12.5,vPos-667.5,hPos+7.5,vPos-667.5);
+
+                        /** post coupler details  top left**/
+                        gc.strokeLine(hPos-10,vPos-681, hPos+12.5,vPos-681);
+                        gc.strokeLine(hPos+12.5,vPos-681,hPos+12.5,vPos-686);
+                        gc.strokeLine(hPos+12.5,vPos-686,hPos+7.5,vPos-686);
+
+                        /** post coupler details bottom right **/
+                        gc.strokeLine(hPos+60,vPos-667.5, hPos+37.5,vPos-667.5);
+                        gc.strokeLine(hPos+37.5,vPos-667.5,hPos+37.5,vPos-662.5);
+                        gc.strokeLine(hPos+37.5,vPos-662.5,hPos+42.5,vPos-662.5);
+
+                        /** post coupler details top right **/
+                        gc.strokeLine(hPos+60,vPos-681, hPos+37.5,vPos-681);
+                        gc.strokeLine(hPos+37.5,vPos-681,hPos+37.5,vPos-686);
+                        gc.strokeLine(hPos+37.5,vPos-686,hPos+42.5,vPos-686);
+                    }
                     if (i+1==4) {
                         gc.strokeLine(hPos+25, vPos-400, hPos+150, vPos-425);
-                        gc.strokeLine(hPos+25, vPos-425, hPos+25, vPos-475);
+                        gc.strokeLine(hPos+25, vPos-425, hPos+25, vPos-500);
+                        gc.strokeLine(hPos+25, vPos-500, hPos+25, vPos-600);
+
+                        gc.strokeLine(hPos+25, vPos-600, hPos-100, vPos-625);
+                        gc.strokeLine(hPos+25, vPos-625, hPos+25, vPos-675);
+
+                        /** line to reject load **/
+                        gc.strokeLine(hPos+25,vPos-675,hPos+75, vPos-675);
+                        /** reject load **/
+                        gc.strokeLine(hPos+75,vPos-675,hPos+80, vPos-695);
+                        gc.strokeLine(hPos+80,vPos-695,hPos+90, vPos-655);
+                        gc.strokeLine(hPos+90,vPos-655,hPos+100, vPos-695);
+                        gc.strokeLine(hPos+100,vPos-695,hPos+110, vPos-655);
+                        gc.strokeLine(hPos+110,vPos-655,hPos+120, vPos-695);
+                        gc.strokeLine(hPos+120,vPos-695,hPos+130, vPos-655);
+                        gc.strokeLine(hPos+130,vPos-655,hPos+140, vPos-695);
+                        gc.strokeLine(hPos+140,vPos-695,hPos+145, vPos-675);
                     }
                     if(i+1==5) {
                         gc.strokeLine(hPos+25, vPos-400, hPos-100, vPos-425);
