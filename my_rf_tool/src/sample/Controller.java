@@ -45,7 +45,7 @@ import javafx.concurrent.*;
 
 public class Controller implements Initializable {
 
-    /** hard coded value for getting pa module descriptions at addPAModules()----- change to find better wat later**/
+    /** hard coded value for getting pa module descriptions at addPAModules()----- change to find better way later**/
     private final int hardCodeVal = 14;
 
     /** FXML elements **/

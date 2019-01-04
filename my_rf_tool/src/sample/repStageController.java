@@ -48,8 +48,9 @@ public class repStageController implements Initializable {
     public Canvas diagram;
     private Parent parent;
 
-
-    /** access Controller from repstageController **/
+    /**
+     * access Controller from repstageController
+     **/
     private Controller report = new Controller();
 
     @Override
@@ -61,19 +62,22 @@ public class repStageController implements Initializable {
         TableColumn numberCol = new TableColumn("No."); /** product description column **/
         TableColumn quantity = new TableColumn("Quantity"); /** product description column **/
 
-        itemReport.getColumns().addAll(numberCol,pid,piddesc,quantity);
-         /***************************************************************
+        itemReport.getColumns().addAll(numberCol, pid, piddesc, quantity);
+        /***************************************************************
          * retrieve values from main scene and display them onto console*
          * will later make this be put into the tableview for this scene*
          ***************************************************************/
 
-         /** Allows to access values from other controller **/
-        FXMLLoader newScene= new FXMLLoader();
+        /** Allows to access values from other controller **/
+        FXMLLoader newScene = new FXMLLoader();
         newScene.setLocation(getClass().getResource("Main.fxml"));
 
-        try {parent = newScene.load();}catch(IOException e){}/** test new scene, throw exception if it fails **/
+        try {
+            parent = newScene.load();
+        } catch (IOException e) {
+        }/** test new scene, throw exception if it fails **/
 
-        if(parent != null){/** executes if new scene loaded properly **/
+        if (parent != null) {/** executes if new scene loaded properly **/
             report = newScene.getController(); /** get main scene controller **/
 
             /** outputting received values to console **/
@@ -88,16 +92,16 @@ public class repStageController implements Initializable {
             /** create observable array list for table insertion **/
             ObservableList<Report> data = FXCollections.observableArrayList(/** add items to array list **/
                     //new Report();
-                    new Report(report.txSelection,report.txSelection),//transmitter info
-                    new Report(report.SWPID,report.selectedSWDescription),//exciter software
-                    new Report(report.filterPID,report.selectedFilterDescription),//filter info
-                    new Report(report.paModulePID,report.selectedPADescription),//pa module info
-                    new Report("arbitrary info","arbitrary info")
+                    new Report(report.txSelection, report.txSelection),//transmitter info
+                    new Report(report.SWPID, report.selectedSWDescription),//exciter software
+                    new Report(report.filterPID, report.selectedFilterDescription),//filter info
+                    new Report(report.paModulePID, report.selectedPADescription),//pa module info
+                    new Report("arbitrary info", "arbitrary info")
                     /** other info to be added here soon **/
             );
 
             pid.setCellValueFactory(new PropertyValueFactory<Report, String>("Pid")); /** ties columns and info together for pid **/
-            piddesc.setCellValueFactory(new PropertyValueFactory<Report,String>("Piddesc")); /** ties columns and info together for piddesc **/
+            piddesc.setCellValueFactory(new PropertyValueFactory<Report, String>("Piddesc")); /** ties columns and info together for piddesc **/
 
             /** auto increment row number **/
             numberCol.setCellFactory(col -> {
@@ -108,7 +112,7 @@ public class repStageController implements Initializable {
                     if (row != null) { // can be null during CSS processing
                         int rowIndex = row.getIndex();
                         if (rowIndex < row.getTableView().getItems().size())
-                            return Integer.toString(rowIndex+1);
+                            return Integer.toString(rowIndex + 1);
                     }
                     return null;
                 }, rowProperty);
@@ -116,18 +120,16 @@ public class repStageController implements Initializable {
                 return indexCell;
             });
 
-            /**************************************************************/
-
             itemReport.setItems(data); /** adds data to table **/
 
 
             /****************************** DIAGRAMMING *******************************/
 
             /** initial coordinates for diagram objects **/
-            double vPos=1100, hPos=500;
+            double vPos = 1100, hPos = 500;
 
             GraphicsContext gc = diagram.getGraphicsContext2D();
-            for(int i=0; i<report.txSelectionCabinets; i++) {
+            for (int i = 0; i < report.txSelectionCabinets; i++) {
 
                 /** argument clarification for strokePolygon();
                  * first arr in strokePolygon is for horizontal alignment
@@ -140,322 +142,140 @@ public class repStageController implements Initializable {
                  *                      index 2 = right
                  * last integer argument in for number of points, in this case, 3 for a triangle
                  */
-                gc.strokePolygon(new double[]{hPos-25, hPos+25, hPos+75}, new double[]{vPos+100, vPos, vPos+100}, 3);
-                gc.strokeText(Integer.toString(i+1),hPos+20,vPos+70);
-                gc.strokeLine(hPos+25,vPos,hPos+25,vPos-25);
+
+                /** create cabinet and place numeric value in cabinet(1=cabinet 1 and so on) **/
+                gc.strokePolygon(new double[]{hPos - 25, hPos + 25, hPos + 75}, new double[]{vPos + 100, vPos, vPos + 100}, 3);
+                gc.strokeText(Integer.toString(i + 1), hPos + 20, vPos + 70);
+
+                /** create line from cabinet to low pass filter **/
+                gc.strokeLine(hPos + 25, vPos, hPos + 25, vPos - 25);
 
                 /** low pass + pre coupler **/
-                gc.strokeRect(hPos,vPos-125,50,100);/** low pass rectangle **/
-                gc.strokeRect(hPos,vPos-175,50,50);/** coupler square **/
+                gc.strokeRect(hPos, vPos - 125, 50, 100);/** low pass rectangle **/
 
-                    /** low pass details **/
-                    gc.strokeLine(hPos+20,vPos-50,hPos+20,vPos-85);
-                    gc.strokeLine(hPos+20,vPos-85,hPos+40,vPos-100);
+                /** low pass details **/
+                gc.strokeLine(hPos + 20, vPos - 50, hPos + 20, vPos - 85);
+                gc.strokeLine(hPos + 20, vPos - 85, hPos + 40, vPos - 100);
 
-                    /** pre coupler details  bottom left**/
-                    gc.strokeLine(hPos-10,vPos-137.5, hPos+12.5,vPos-137.5);
-                    gc.strokeLine(hPos+12.5,vPos-137.5,hPos+12.5,vPos-142.5);
-                    gc.strokeLine(hPos+12.5,vPos-142.5,hPos+7.5,vPos-142.5);
-
-                    /** pre coupler details  top left**/
-                    gc.strokeLine(hPos-10,vPos-155, hPos+12.5,vPos-155);
-                    gc.strokeLine(hPos+12.5,vPos-155,hPos+12.5,vPos-160);
-                    gc.strokeLine(hPos+12.5,vPos-160,hPos+7.5,vPos-160);
-
-                    /** pre coupler details bottom right **/
-                    gc.strokeLine(hPos+60,vPos-142.5, hPos+37.5,vPos-142.5);
-                    gc.strokeLine(hPos+37.5,vPos-142.5,hPos+37.5,vPos-137.5);
-                    gc.strokeLine(hPos+37.5,vPos-137.5,hPos+42.5,vPos-137.5);
-
-                    /** pre coupler details top right **/
-                    gc.strokeLine(hPos+60,vPos-155, hPos+37.5,vPos-155);
-                    gc.strokeLine(hPos+37.5,vPos-155,hPos+37.5,vPos-160);
-                    gc.strokeLine(hPos+37.5,vPos-160,hPos+42.5,vPos-160);
+                /** call createCoupler() to create coupler visual **/
+                createCoupler(gc, hPos, vPos - 175);
 
                 /** pre coupler to mask filter **/
-                gc.strokeLine(hPos+25,vPos-125,hPos+25,vPos-200);
+                gc.strokeLine(hPos + 25, vPos - 125, hPos + 25, vPos - 200);
 
                 /** mask filter + post coupler **/
-                gc.strokeRect(hPos,vPos-300,50,100);/** mask filter rectangle square **/
-                gc.strokeRect(hPos,vPos-350,50,50);/** coupler square **/
+                gc.strokeRect(hPos, vPos - 300, 50, 100);/** mask filter rectangle square **/
 
-                    /** mask filter details **/
-                    gc.strokeLine(hPos+20,vPos-262.5,hPos+40,vPos-287.5);
-                    gc.strokeLine(hPos+20,vPos-237.5,hPos+20,vPos-262.5);
-                    gc.strokeLine(hPos+20,vPos-237.5,hPos+40,vPos-212.5);
+                /** mask filter details **/
+                gc.strokeLine(hPos + 20, vPos - 262.5, hPos + 40, vPos - 287.5);
+                gc.strokeLine(hPos + 20, vPos - 237.5, hPos + 20, vPos - 262.5);
+                gc.strokeLine(hPos + 20, vPos - 237.5, hPos + 40, vPos - 212.5);
 
-                    /** post coupler details bottom left **/
-                    gc.strokeLine(hPos-10,vPos-312.5, hPos+12.5,vPos-312.5);
-                    gc.strokeLine(hPos+12.5,vPos-312.5,hPos+12.5,vPos-317.5);
-                    gc.strokeLine(hPos+12.5,vPos-317.5,hPos+7.5,vPos-317.5);
-
-                    /** post coupler details top left **/
-                    gc.strokeLine(hPos-10,vPos-330, hPos+12.5,vPos-330);
-                    gc.strokeLine(hPos+12.5,vPos-330,hPos+12.5,vPos-335);
-                    gc.strokeLine(hPos+12.5,vPos-335,hPos+7.5,vPos-335);
-
-                    /** post coupler details bottom right **/
-                    gc.strokeLine(hPos+60,vPos-317.5, hPos+37.5,vPos-317.5);
-                    gc.strokeLine(hPos+37.5,vPos-317.5,hPos+37.5,vPos-312.5);
-                    gc.strokeLine(hPos+37.5,vPos-312.5,hPos+42.5,vPos-312.5);
-
-                    /** post coupler details top right **/
-                    gc.strokeLine(hPos+60,vPos-330, hPos+37.5,vPos-330);
-                    gc.strokeLine(hPos+37.5,vPos-330,hPos+37.5,vPos-335);
-                    gc.strokeLine(hPos+37.5,vPos-335,hPos+42.5,vPos-335);
+                /** call createCoupler() to create coupler visual **/
+                createCoupler(gc, hPos, vPos - 350);
 
                 /** pre coupler and onward **/
-                gc.strokeLine(hPos+25,vPos-300,hPos+25,vPos-375);
+                gc.strokeLine(hPos + 25, vPos - 300, hPos + 25, vPos - 375);
                 gc.stroke();
 
-
                 /** hybrid combiners **/
-                if(report.txSelectionCabinets!=1)
-                    gc.strokeLine(hPos+25,vPos-375,hPos+25,vPos-400);
-                
-                if(report.txSelectionCabinets > i+1)/** correctly place combiners when there's more than 1 cabinet **/
-                    if((i+1 == 1)) {
-                        gc.strokeRect(hPos, vPos-450, 175, 75);
-                        gc.strokeLine(hPos+25,vPos-400,hPos+150,vPos-425);
-                        gc.strokeLine(hPos+25, vPos-425, hPos+25, vPos-475);
-                        /** line to reject load **/
-                        gc.strokeLine(hPos+25,vPos-475,hPos-25, vPos-475);
-                        /** reject load **/
-                        gc.strokeLine(hPos-25,vPos-475,hPos-30,vPos-495);
-                        gc.strokeLine(hPos-30,vPos-495,hPos-40,vPos-455);
-                        gc.strokeLine(hPos-40,vPos-455,hPos-50,vPos-495);
-                        gc.strokeLine(hPos-50,vPos-495,hPos-60,vPos-455);
-                        gc.strokeLine(hPos-60,vPos-455,hPos-70,vPos-495);
-                        gc.strokeLine(hPos-70,vPos-495,hPos-80,vPos-455);
-                        gc.strokeLine(hPos-80,vPos-455,hPos-90,vPos-495);
-                        gc.strokeLine(hPos-90,vPos-495,hPos-95,vPos-475);
+                if (report.txSelectionCabinets != 1) {
+                    /** line that extends from post coupler to hybrid combiner **/
+                    gc.strokeLine(hPos + 25, vPos - 375, hPos + 25, vPos - 400);
+                }
+
+                if (report.txSelectionCabinets > i + 1)/** if cabinets > 1, cabinet one will be attached to combiner **/
+                    if ((i + 1 == 1)) {
+
+                        /** call createHybridCombiner() to create hybrid combiner visual **/
+                        createHybridCombiner(gc, hPos, vPos - 450, i);
+
+                        /** call createRejectLoad() to create reject load visual **/
+                        createRejectLoad(gc, hPos + 25, vPos - 475, hPos - 25, vPos - 475);
                     }
 
-                /** conditions for line crossing in hybrid combiners **/
-
-                if(i+1 == 2) {
-                    gc.strokeLine(hPos+25, vPos-400, hPos-100, vPos-425);
-                    gc.strokeLine(hPos+25, vPos-425, hPos+25, vPos-500);
-                    if(report.txSelectionCabinets == 2){/**add coupler to left side of combiner when number of cabinets = 2 **/
-                        gc.strokeRect(hPos,vPos-500,50,50);/** coupler square **/
-                        /** post coupler details  bottom left**/
-                        gc.strokeLine(hPos-10,vPos-462.5, hPos+12.5,vPos-462.5);
-                        gc.strokeLine(hPos+12.5,vPos-462.5,hPos+12.5,vPos-467.5);
-                        gc.strokeLine(hPos+12.5,vPos-467.5,hPos+7.5,vPos-467.5);
-
-                        /** post coupler details  top left**/
-                        gc.strokeLine(hPos-10,vPos-481, hPos+12.5,vPos-481);
-                        gc.strokeLine(hPos+12.5,vPos-481,hPos+12.5,vPos-486);
-                        gc.strokeLine(hPos+12.5,vPos-486,hPos+7.5,vPos-486);
-
-                        /** post coupler details bottom right **/
-                        gc.strokeLine(hPos+60,vPos-467.5, hPos+37.5,vPos-467.5);
-                        gc.strokeLine(hPos+37.5,vPos-467.5,hPos+37.5,vPos-462.5);
-                        gc.strokeLine(hPos+37.5,vPos-462.5,hPos+42.5,vPos-462.5);
-
-                        /** post coupler details top right **/
-                        gc.strokeLine(hPos+60,vPos-481, hPos+37.5,vPos-481);
-                        gc.strokeLine(hPos+37.5,vPos-481,hPos+37.5,vPos-486);
-                        gc.strokeLine(hPos+37.5,vPos-486,hPos+42.5,vPos-486);
-
+                if (i + 1 == 2) {
+                    if (report.txSelectionCabinets == 2) {/**add coupler to left side of combiner when number of cabinets = 2 **/
+                        /** call createCoupler() to create coupler visual **/
+                        createCoupler(gc, hPos, vPos - 500);
                     }
                 }
 
-                if(report.txSelectionCabinets == 3){
-                    if(i+1==2){
-                        gc.strokeRect(hPos, vPos-550, 175, 75);/**combiner rectangle **/
-                        gc.strokeLine(hPos+25, vPos-500, hPos+150, vPos-525);
-                        gc.strokeLine(hPos+25, vPos-525, hPos+25, vPos-600);
+                if (report.txSelectionCabinets == 3) {
+                    if (i + 1 == 2) {
 
-                        gc.strokeRect(hPos,vPos-600,50,50);/** coupler square **/
-                        /** post coupler details  bottom left**/
-                        gc.strokeLine(hPos-10,vPos-562.5, hPos+12.5,vPos-562.5);
-                        gc.strokeLine(hPos+12.5,vPos-562.5,hPos+12.5,vPos-567.5);
-                        gc.strokeLine(hPos+12.5,vPos-567.5,hPos+7.5,vPos-567.5);
+                        /** call createHybridCombiner() to create hybrid combiner visual **/
+                        createHybridCombiner(gc, hPos, vPos - 550, i);
 
-                        /** post coupler details  top left**/
-                        gc.strokeLine(hPos-10,vPos-581, hPos+12.5,vPos-581);
-                        gc.strokeLine(hPos+12.5,vPos-581,hPos+12.5,vPos-586);
-                        gc.strokeLine(hPos+12.5,vPos-586,hPos+7.5,vPos-586);
-
-                        /** post coupler details bottom right **/
-                        gc.strokeLine(hPos+60,vPos-567.5, hPos+37.5,vPos-567.5);
-                        gc.strokeLine(hPos+37.5,vPos-567.5,hPos+37.5,vPos-562.5);
-                        gc.strokeLine(hPos+37.5,vPos-562.5,hPos+42.5,vPos-562.5);
-
-                        /** post coupler details top right **/
-                        gc.strokeLine(hPos+60,vPos-581, hPos+37.5,vPos-581);
-                        gc.strokeLine(hPos+37.5,vPos-581,hPos+37.5,vPos-586);
-                        gc.strokeLine(hPos+37.5,vPos-586,hPos+42.5,vPos-586);
+                        /** call createCoupler() to create coupler visual **/
+                        createCoupler(gc, hPos, vPos - 600);
                     }
-                    if(i+1==3) {/** draw line from cabinet 3 to combiner **/
+                    if (i + 1 == 3) {
+
+                        /** draw line from cabinet 3 to combiner **/
                         gc.strokeLine(hPos + 25, vPos - 400, hPos + 25, vPos - 500);
-                        gc.strokeLine(hPos+25, vPos-500, hPos-100, vPos-525);
-                        gc.strokeLine(hPos+25, vPos-525, hPos+25, vPos-575);
 
-                        /** line to reject load **/
-                        gc.strokeLine(hPos+25,vPos-575,hPos+75, vPos-575);
-                        /** reject load **/
-                        gc.strokeLine(hPos+75,vPos-575,hPos+80, vPos-595);
-                        gc.strokeLine(hPos+80,vPos-595,hPos+85, vPos-555);
-                        gc.strokeLine(hPos+85,vPos-555,hPos+95, vPos-595);
-                        gc.strokeLine(hPos+95,vPos-595,hPos+105, vPos-555);
-                        gc.strokeLine(hPos+105,vPos-555,hPos+115, vPos-595);
-                        gc.strokeLine(hPos+115,vPos-595,hPos+125, vPos-555);
-                        gc.strokeLine(hPos+125,vPos-555,hPos+135, vPos-595);
-                        gc.strokeLine(hPos+135,vPos-595,hPos+140, vPos-575);
+                        /** call createRejectLoad() to create reject load visual **/
+                        createRejectLoad(gc, hPos + 25, vPos - 575, hPos + 75, vPos - 575);
                     }
                 }
-                if(report.txSelectionCabinets == 4) {
-                    if(i+1==2){
-                        gc.strokeRect(hPos, vPos-550, 175, 75);/**combiner rectangle **/
-                        gc.strokeLine(hPos+25, vPos-500, hPos+150, vPos-525);
-                        gc.strokeLine(hPos+25, vPos-525, hPos+25, vPos-600);
+                if (report.txSelectionCabinets == 4) {
+                    if (i + 1 == 2) {
 
-                        gc.strokeRect(hPos,vPos-600,50,50);/** coupler square **/
-                        /** post coupler details  bottom left**/
-                        gc.strokeLine(hPos-10,vPos-562.5, hPos+12.5,vPos-562.5);
-                        gc.strokeLine(hPos+12.5,vPos-562.5,hPos+12.5,vPos-567.5);
-                        gc.strokeLine(hPos+12.5,vPos-567.5,hPos+7.5,vPos-567.5);
+                        /** call createHybridCombiner() to create hybrid combiner visual **/
+                        createHybridCombiner(gc, hPos, vPos - 550, i);
 
-                        /** post coupler details  top left**/
-                        gc.strokeLine(hPos-10,vPos-581, hPos+12.5,vPos-581);
-                        gc.strokeLine(hPos+12.5,vPos-581,hPos+12.5,vPos-586);
-                        gc.strokeLine(hPos+12.5,vPos-586,hPos+7.5,vPos-586);
+                        /** call createCoupler() to create coupler visual **/
+                        createCoupler(gc, hPos, vPos - 600);
 
-                        /** post coupler details bottom right **/
-                        gc.strokeLine(hPos+60,vPos-567.5, hPos+37.5,vPos-567.5);
-                        gc.strokeLine(hPos+37.5,vPos-567.5,hPos+37.5,vPos-562.5);
-                        gc.strokeLine(hPos+37.5,vPos-562.5,hPos+42.5,vPos-562.5);
-
-                        /** post coupler details top right **/
-                        gc.strokeLine(hPos+60,vPos-581, hPos+37.5,vPos-581);
-                        gc.strokeLine(hPos+37.5,vPos-581,hPos+37.5,vPos-586);
-                        gc.strokeLine(hPos+37.5,vPos-586,hPos+42.5,vPos-586);
                     }
-                    if (i+1==3) {
-                        gc.strokeLine(hPos+25, vPos-400, hPos+150, vPos-425);
-                        gc.strokeLine(hPos+25, vPos-425, hPos+25, vPos-500);
-                        gc.strokeLine(hPos+25, vPos-500, hPos-100, vPos-525);
-                        gc.strokeLine(hPos+25, vPos-525, hPos+25, vPos-575);
+                    if (i + 1 == 3) {
 
-                        /** line to reject load **/
-                        gc.strokeLine(hPos+25,vPos-575,hPos+75, vPos-575);
-                        /** reject load **/
-                        gc.strokeLine(hPos+75,vPos-575,hPos+80, vPos-595);
-                        gc.strokeLine(hPos+80,vPos-595,hPos+85, vPos-555);
-                        gc.strokeLine(hPos+85,vPos-555,hPos+95, vPos-595);
-                        gc.strokeLine(hPos+95,vPos-595,hPos+105, vPos-555);
-                        gc.strokeLine(hPos+105,vPos-555,hPos+115, vPos-595);
-                        gc.strokeLine(hPos+115,vPos-595,hPos+125, vPos-555);
-                        gc.strokeLine(hPos+125,vPos-555,hPos+135, vPos-595);
-                        gc.strokeLine(hPos+135,vPos-595,hPos+140, vPos-575);
+                        /** call createHybridCombiner() to create hybrid combiner visual **/
+                        createHybridCombiner(gc, hPos, vPos - 450, i);
+
+                        /** call createRejectLoad() to create reject load visual **/
+                        createRejectLoad(gc, hPos + 25, vPos - 575, hPos + 75, vPos - 575);
                     }
-                    if(i+1==4) {
-                        gc.strokeLine(hPos+25, vPos-400, hPos-100, vPos-425);
-                        gc.strokeLine(hPos+25, vPos-425, hPos+25, vPos-475);
-                        /** line to reject load **/
-                        gc.strokeLine(hPos+25,vPos-475,hPos+75, vPos-475);
-                        /** reject load **/
-                        gc.strokeLine(hPos+75,vPos-475,hPos+80, vPos-495);
-                        gc.strokeLine(hPos+80,vPos-495,hPos+85, vPos-455);
-                        gc.strokeLine(hPos+85,vPos-455,hPos+95, vPos-495);
-                        gc.strokeLine(hPos+95,vPos-495,hPos+105, vPos-455);
-                        gc.strokeLine(hPos+105,vPos-455,hPos+115, vPos-495);
-                        gc.strokeLine(hPos+115,vPos-495,hPos+125, vPos-455);
-                        gc.strokeLine(hPos+125,vPos-455,hPos+135, vPos-495);
-                        gc.strokeLine(hPos+135,vPos-495,hPos+140, vPos-475);
+                    if (i + 1 == 4) {
+
+                        /** call createRejectLoad() to create reject load visual **/
+                        createRejectLoad(gc, hPos + 25, vPos - 475, hPos + 75, vPos - 475);
                     }
                 }
 
-                if(report.txSelectionCabinets == 5) {
-                    if(i+1==2){
-                        gc.strokeRect(hPos, vPos-550, 175, 75);/**combiner rectangle **/
-                        gc.strokeLine(hPos+25, vPos-500, hPos+150, vPos-525);
-                        gc.strokeLine(hPos+25, vPos-525, hPos+25, vPos-575);
+                if (report.txSelectionCabinets == 5) {
+                    if (i + 1 == 2) {
 
-                        /** line to reject load **/
-                        gc.strokeLine(hPos+25,vPos-575,hPos-25, vPos-575);
-                        /** reject load **/
-                        gc.strokeLine(hPos-25,vPos-575,hPos-30,vPos-595);
-                        gc.strokeLine(hPos-30,vPos-595,hPos-40,vPos-555);
-                        gc.strokeLine(hPos-40,vPos-555,hPos-50,vPos-595);
-                        gc.strokeLine(hPos-50,vPos-595,hPos-60,vPos-555);
-                        gc.strokeLine(hPos-60,vPos-555,hPos-70,vPos-595);
-                        gc.strokeLine(hPos-70,vPos-595,hPos-80,vPos-555);
-                        gc.strokeLine(hPos-80,vPos-555,hPos-90,vPos-595);
-                        gc.strokeLine(hPos-90,vPos-595,hPos-95,vPos-575);
+                        /** call createHybridCombiner() to create hybrid combiner visual **/
+                        createHybridCombiner(gc, hPos, vPos - 550, i);
+
+                        /** call createRejectLoad() to create reject load visual **/
+                        createRejectLoad(gc, hPos + 25, vPos - 575, hPos - 25, vPos - 575);
                     }
-                    if(i+1==3){
+                    if (i + 1 == 3) {
                         gc.strokeLine(hPos + 25, vPos - 400, hPos + 25, vPos - 500);
-                        gc.strokeLine(hPos+25, vPos-500, hPos-100, vPos-525);
-                        gc.strokeLine(hPos+25, vPos-525, hPos+25, vPos-600);
 
-                        gc.strokeRect(hPos, vPos-650, 175, 75);/**combiner rectangle **/
-                        gc.strokeLine(hPos+25, vPos-600, hPos+150, vPos-625);
-                        gc.strokeLine(hPos+25, vPos-625, hPos+25, vPos-700);
+                        /** call createHybridCombiner() to create hybrid combiner visual **/
+                        createHybridCombiner(gc, hPos, vPos - 650, i);
 
-                        gc.strokeRect(hPos,vPos-700,50,50);/** coupler square **/
-                        /** post coupler details  bottom left**/
-                        gc.strokeLine(hPos-10,vPos-662.5, hPos+12.5,vPos-662.5);
-                        gc.strokeLine(hPos+12.5,vPos-662.5,hPos+12.5,vPos-667.5);
-                        gc.strokeLine(hPos+12.5,vPos-667.5,hPos+7.5,vPos-667.5);
-
-                        /** post coupler details  top left**/
-                        gc.strokeLine(hPos-10,vPos-681, hPos+12.5,vPos-681);
-                        gc.strokeLine(hPos+12.5,vPos-681,hPos+12.5,vPos-686);
-                        gc.strokeLine(hPos+12.5,vPos-686,hPos+7.5,vPos-686);
-
-                        /** post coupler details bottom right **/
-                        gc.strokeLine(hPos+60,vPos-667.5, hPos+37.5,vPos-667.5);
-                        gc.strokeLine(hPos+37.5,vPos-667.5,hPos+37.5,vPos-662.5);
-                        gc.strokeLine(hPos+37.5,vPos-662.5,hPos+42.5,vPos-662.5);
-
-                        /** post coupler details top right **/
-                        gc.strokeLine(hPos+60,vPos-681, hPos+37.5,vPos-681);
-                        gc.strokeLine(hPos+37.5,vPos-681,hPos+37.5,vPos-686);
-                        gc.strokeLine(hPos+37.5,vPos-686,hPos+42.5,vPos-686);
+                        /** call createCoupler() to create coupler visual **/
+                        createCoupler(gc, hPos, vPos - 700);
                     }
-                    if (i+1==4) {
-                        gc.strokeLine(hPos+25, vPos-400, hPos+150, vPos-425);
-                        gc.strokeLine(hPos+25, vPos-425, hPos+25, vPos-500);
-                        gc.strokeLine(hPos+25, vPos-500, hPos+25, vPos-600);
+                    if (i + 1 == 4) {
 
-                        gc.strokeLine(hPos+25, vPos-600, hPos-100, vPos-625);
-                        gc.strokeLine(hPos+25, vPos-625, hPos+25, vPos-675);
+                        /** call createHybridCombiner() to create hybrid combiner visual **/
+                        createHybridCombiner(gc, hPos, vPos - 450, i);
+                        gc.strokeLine(hPos + 25, vPos - 500, hPos + 25, vPos - 600);
 
-                        /** line to reject load **/
-                        gc.strokeLine(hPos+25,vPos-675,hPos+75, vPos-675);
-                        /** reject load **/
-                        gc.strokeLine(hPos+75,vPos-675,hPos+80, vPos-695);
-                        gc.strokeLine(hPos+80,vPos-695,hPos+90, vPos-655);
-                        gc.strokeLine(hPos+90,vPos-655,hPos+100, vPos-695);
-                        gc.strokeLine(hPos+100,vPos-695,hPos+110, vPos-655);
-                        gc.strokeLine(hPos+110,vPos-655,hPos+120, vPos-695);
-                        gc.strokeLine(hPos+120,vPos-695,hPos+130, vPos-655);
-                        gc.strokeLine(hPos+130,vPos-655,hPos+140, vPos-695);
-                        gc.strokeLine(hPos+140,vPos-695,hPos+145, vPos-675);
+                        /** call createRejectLoad() to create reject load visual **/
+                        createRejectLoad(gc, hPos + 25, vPos - 675, hPos + 75, vPos - 675);
                     }
-                    if(i+1==5) {
-                        gc.strokeLine(hPos+25, vPos-400, hPos-100, vPos-425);
-                        gc.strokeLine(hPos+25, vPos-425, hPos+25, vPos-475);
-                        /** line to reject load **/
-                        gc.strokeLine(hPos+25,vPos-475,hPos+75, vPos-475);
-                        /** reject load **/
-                        gc.strokeLine(hPos+75,vPos-475,hPos+80, vPos-495);
-                        gc.strokeLine(hPos+80,vPos-495,hPos+90, vPos-455);
-                        gc.strokeLine(hPos+90,vPos-455,hPos+100, vPos-495);
-                        gc.strokeLine(hPos+100,vPos-495,hPos+110, vPos-455);
-                        gc.strokeLine(hPos+110,vPos-455,hPos+120, vPos-495);
-                        gc.strokeLine(hPos+120,vPos-495,hPos+130, vPos-455);
-                        gc.strokeLine(hPos+130,vPos-455,hPos+140, vPos-495);
-                        gc.strokeLine(hPos+140,vPos-495,hPos+145, vPos-475);
-                    }
-                }
+                    if (i + 1 == 5) {
 
-                /** condition to place hybrid combiners when cabinets = 4 or cabinets = 5 **/
-                if((i+1 == 5) || (report.txSelectionCabinets == 4 && i+1 == 4)) {
-                    gc.strokeRect(hPos-125, vPos-450, 175, 75);
+                        /** call createRejectLoad() to create reject load visual **/
+                        createRejectLoad(gc, hPos + 25, vPos - 475, hPos + 75, vPos - 475);
+                    }
                 }
 
                 /** increment horizontal position
@@ -464,6 +284,124 @@ public class repStageController implements Initializable {
                  **/
                 hPos += 125;
             }
+        }
+    }
+
+    /**
+     * function to create the reject load visual for the diagram
+     **/
+    private void createRejectLoad(GraphicsContext gc, double hPos1, double vPos1, double hPos2, double vPos2) {
+
+        /** line leading to reject load **/
+        gc.strokeLine(hPos1, vPos1, hPos2, vPos2);
+        /** reject load zigzags **/
+        for (int i = 0; i < 6; i++) {
+            if (i == 0) {
+                if (hPos2 < hPos1) {
+                    gc.strokeLine(hPos1 - 50, vPos1, hPos2 - 5, vPos2 - 20);
+                    vPos1 -= 20;
+                    vPos2 += 20;
+                    hPos1 -= 55;
+                    hPos2 -= 15;
+                } else {
+                    gc.strokeLine(hPos1 + 50, vPos1, hPos2 + 5, vPos2 - 20);
+                    vPos1 -= 20;
+                    vPos2 += 20;
+                    hPos1 += 55;
+                    hPos2 += 15;
+                }
+            }
+            if (i != 0 || i != 6) {
+                if (hPos2 < hPos1) {
+                    gc.strokeLine(hPos1, vPos1, hPos2, vPos2);
+                    hPos1 -= 10;
+                    hPos2 -= 10;
+                } else {
+                    gc.strokeLine(hPos1, vPos1, hPos2, vPos2);
+                    hPos1 += 10;
+                    hPos2 += 10;
+                }
+                double temp = vPos1;
+                vPos1 = vPos2;
+                vPos2 = temp;
+            }
+            if (i + 1 == 6) {
+                if (hPos2 < hPos1) {
+                    gc.strokeLine(hPos1, vPos1, hPos2 + 5, vPos2 - 20);
+                } else {
+                    gc.strokeLine(hPos1, vPos1, hPos2 - 5, vPos2 - 20);
+                }
+            }
+        }
+    }
+
+    /**
+     * function to create coupler visual for diagram
+     **/
+    private void createCoupler(GraphicsContext gc, double hPos1, double vPos1) {
+
+        /** coupler square **/
+        gc.strokeRect(hPos1, vPos1, 50, 50);
+        /** post coupler details  bottom left**/
+        gc.strokeLine(hPos1 - 10, vPos1 + 37.5, hPos1 + 12.5, vPos1 + 37.5);
+        gc.strokeLine(hPos1 + 12.5, vPos1 + 37.5, hPos1 + 12.5, vPos1 + 32.5);
+        gc.strokeLine(hPos1 + 12.5, vPos1 + 32.5, hPos1 + 7.5, vPos1 + 32.5);
+
+        /** post coupler details  top left**/
+        gc.strokeLine(hPos1 - 10, vPos1 + 19, hPos1 + 12.5, vPos1 + 19);
+        gc.strokeLine(hPos1 + 12.5, vPos1 + 19, hPos1 + 12.5, vPos1 + 14);
+        gc.strokeLine(hPos1 + 12.5, vPos1 + 14, hPos1 + 7.5, vPos1 + 14);
+
+        /** post coupler details bottom right **/
+        gc.strokeLine(hPos1 + 60, vPos1 + 32.5, hPos1 + 37.5, vPos1 + 32.5);
+        gc.strokeLine(hPos1 + 37.5, vPos1 + 32.5, hPos1 + 37.5, vPos1 + 37.5);
+        gc.strokeLine(hPos1 + 37.5, vPos1 + 37.5, hPos1 + 42.5, vPos1 + 37.5);
+
+        /** post coupler details top right **/
+        gc.strokeLine(hPos1 + 60, vPos1 + 19, hPos1 + 37.5, vPos1 + 19);
+        gc.strokeLine(hPos1 + 37.5, vPos1 + 19, hPos1 + 37.5, vPos1 + 14);
+        gc.strokeLine(hPos1 + 37.5, vPos1 + 14, hPos1 + 42.5, vPos1 + 14);
+    }
+
+    /**
+     * function to create hybrid combiner visual for diagram
+     **/
+    private void createHybridCombiner(GraphicsContext gc, double hPos1, double vPos1, int index) {
+        /** Allows to access values from other controller **/
+        FXMLLoader newScene = new FXMLLoader();
+        newScene.setLocation(getClass().getResource("Main.fxml"));
+
+        try {
+            parent = newScene.load();
+        } catch (IOException e) {
+        }/** test new scene, throw exception if it fails **/
+
+        if (parent != null) {/** executes if new scene loaded properly **/
+            report = newScene.getController(); /** get main scene controller **/
+        }
+
+        gc.strokeRect(hPos1, vPos1, 175, 75);/** combiner rectangle **/
+
+        if (index == 0 || index == 1) {
+            gc.strokeLine(hPos1 + 25, vPos1 + 50, hPos1 + 150, vPos1 + 25);    /** / **/
+            if (index == 0)
+                gc.strokeLine(hPos1 + 150, vPos1 + 25, hPos1 + 150, vPos1 - 50);
+            else if (report.txSelectionCabinets == 5)
+                gc.strokeLine(hPos1 + 150, vPos1 + 25, hPos1 + 150, vPos1 - 50);
+            else
+                gc.strokeLine(hPos1 + 150, vPos1 + 25, hPos1 + 150, vPos1 - 25);
+
+            gc.strokeLine(hPos1 + 150, vPos1 + 50, hPos1 + 25, vPos1 + 25); /** \ **/
+            if ((report.txSelectionCabinets >= 3 && index == 1) && report.txSelectionCabinets != 5)
+                gc.strokeLine(hPos1 + 25, vPos1 + 25, hPos1 + 25, vPos1 - 50);
+            else
+                gc.strokeLine(hPos1 + 25, vPos1 + 25, hPos1 + 25, vPos1 - 25);
+        } else if (index > 1) {
+            gc.strokeLine(hPos1 + 25, vPos1 + 50, hPos1 + 150, vPos1 + 25);    /** / **/
+            gc.strokeLine(hPos1 + 150, vPos1 + 25, hPos1 + 150, vPos1 - 25);
+
+            gc.strokeLine(hPos1 + 150, vPos1 + 50, hPos1 + 25, vPos1 + 25); /** \ **/
+            gc.strokeLine(hPos1 + 25, vPos1 + 25, hPos1 + 25, vPos1 - 50);
         }
     }
 }
