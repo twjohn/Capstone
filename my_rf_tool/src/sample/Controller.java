@@ -1,19 +1,13 @@
 package sample;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.w3c.dom.Document;
@@ -21,27 +15,17 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import javax.swing.text.AbstractDocument;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.concurrent.*;
-
 
 public class Controller implements Initializable {
 
@@ -75,8 +59,7 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-
-        //keeps height and width from looking abnormal on the switch/patch dropdown
+        /** keeps height and width from looking abnormal on the switch/patch dropdown **/
         switchPatch.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
             @Override
             public ListCell<String> call(ListView<String> param) {
@@ -86,14 +69,13 @@ public class Controller implements Initializable {
                         super.updateItem(item, empty);
                         int numItems = getListView().getItems().size();
                         int height = 175;    // set the maximum height of the popup
-                        if (numItems <= 6) height = numItems *27;    // set the height of the popup if number of items is equal to or less than 5
+                        if (numItems <= 6) height = numItems *27;    // set the height of the popup if number of items is equal to or less than 6
                         getListView().setPrefHeight(height);
                         getListView().setPrefWidth(200.0);
-                        if (!empty) {
-                            setText(item.toString());
-                        } else {
+                        if (!empty)
                             setText(item);
-                        }
+                        else
+                            setText(item);
                     }
                 };
                 return cell;
@@ -107,7 +89,7 @@ public class Controller implements Initializable {
         channel.setText("2");/** set default values for channel textbox **/
 
         addMainSWInfo();/** Loads Software info upon window initialization **/
-        addPAModules();/** Loads PA Modules info uon window initialization **/
+        addPAModules();/** Loads PA Modules info upon window initialization **/
 
         mainExciterSW.getSelectionModel().selectFirst();/** Automatically picks first selection for mainExciterSW **/
         paModules.getSelectionModel().selectFirst(); /** Automatically picks first selection for paModules **/
@@ -139,6 +121,7 @@ public class Controller implements Initializable {
     /** Method to generate a report based upon user input-- opens new window that displays item report and rf diagram on button click event **/
     public void genNewRep() {
 
+        /** can possibly delete conditional? or complete this to make a secondary safeguard against error **/
         if (tx_cb.getValue() == null || filter.getValue() == null || switchPatch.getValue() == null) {
             //conditional to tell if enough information was provide to construct a rf diagram/report
             return;
@@ -156,6 +139,8 @@ public class Controller implements Initializable {
                     selectedPADescription = (String)paModules.getValue();
                     txSelection = (String)tx_cb.getValue();
                     txSelectionCabinets = cabinets;
+
+                    /** load a new scene **/
                     FXMLLoader fxmlLoader = new FXMLLoader();
                     fxmlLoader.setLocation(getClass().getResource("repStage.fxml"));
                     Scene scene = new Scene(fxmlLoader.load(), 700, 800);
@@ -164,14 +149,13 @@ public class Controller implements Initializable {
                     stage.setScene(scene);
                     stage.setMaximized(true);
                     stage.show();
-                } catch (IOException e) {//catch error opening window
+                } catch (IOException e) {/** catch error opening window **/
                     Logger logger = Logger.getLogger(getClass().getName());
                     logger.log(Level.SEVERE, "Failed to create generate report.", e);
                 }
             /** displays and opens new window when proper input is detected for all cases **/
             return;
         }
-
     }
 
      /** simple method to check if tpo textfield is empty and sets focus to it **/
@@ -184,8 +168,7 @@ public class Controller implements Initializable {
 
     /** method to check if dual exciter check box is selected returns true if selected **/
     public boolean checkDualExciters() {
-        if (dualExciter.isSelected()) return true;
-        else return false;
+        return dualExciter.isSelected();
     }
 
     /** event for when a transmitter is picked from tx_cb combo box **/
@@ -418,7 +401,6 @@ public class Controller implements Initializable {
                         if(SWPIDDESCRIPTION.equals("MODULE PA WIDEBAND (TYPE D)(47-750MHz)"))
                             break;
                         mainExciterSW.getItems().add(SWPIDDESCRIPTION);
-
                 }
             }
         }
@@ -481,38 +463,35 @@ public class Controller implements Initializable {
                 }
             }
         }
-    /***************************************************************
-    //end adding filter options
-    ***************************************************************/
-}
-    public void getFilterPID(){
-    DocumentBuilderFactory filteringFactory = DocumentBuilderFactory.newInstance();
-    DocumentBuilder filterBuilder = null;
-    try { filterBuilder = filteringFactory.newDocumentBuilder(); }
-    catch (ParserConfigurationException e) { e.printStackTrace(); }
-
-    Document filterDocument = null;
-    try { filterDocument = filterBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\maskFiltersCouplers.xml")); }
-    catch (SAXException e) { e.printStackTrace(); }
-    catch (IOException e) { e.printStackTrace(); }
-
-    List<sample.Filtering> theFilters = new ArrayList<sample.Filtering>();
-    NodeList filtersNodeList = filterDocument.getDocumentElement().getChildNodes();
-    for (int i = 0; i < filtersNodeList.getLength(); i++) {
-        Node filtersNode = filtersNodeList.item(i);
-        if (filtersNode.getNodeType() == Node.ELEMENT_NODE) {
-            Element filtersElement = (Element) filtersNode;
-
-            filterPIDDescription = filtersElement.getElementsByTagName("PIDDESCRIPTION").item(0).getChildNodes().item(0).getNodeValue();
-            filterSize = filtersElement.getElementsByTagName("Size").item(0).getChildNodes().item(0).getNodeValue();
-            filterPID = filtersElement.getElementsByTagName("PID").item(0).getChildNodes().item(0).getNodeValue();
-        }
-        String filterConcatenation = filterPIDDescription + " input size " + filterSize;
-
-        if(filterConcatenation.equals(filter.getValue()))// combines values needed for a proper filter ID and checks
-            break;
     }
-}
+    public void getFilterPID(){
+        DocumentBuilderFactory filteringFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder filterBuilder = null;
+        try { filterBuilder = filteringFactory.newDocumentBuilder(); }
+        catch (ParserConfigurationException e) { e.printStackTrace(); }
+
+        Document filterDocument = null;
+        try { filterDocument = filterBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\maskFiltersCouplers.xml")); }
+        catch (SAXException e) { e.printStackTrace(); }
+        catch (IOException e) { e.printStackTrace(); }
+
+        List<sample.Filtering> theFilters = new ArrayList<sample.Filtering>();
+        NodeList filtersNodeList = filterDocument.getDocumentElement().getChildNodes();
+        for (int i = 0; i < filtersNodeList.getLength(); i++) {
+            Node filtersNode = filtersNodeList.item(i);
+            if (filtersNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element filtersElement = (Element) filtersNode;
+
+                filterPIDDescription = filtersElement.getElementsByTagName("PIDDESCRIPTION").item(0).getChildNodes().item(0).getNodeValue();
+                filterSize = filtersElement.getElementsByTagName("Size").item(0).getChildNodes().item(0).getNodeValue();
+                filterPID = filtersElement.getElementsByTagName("PID").item(0).getChildNodes().item(0).getNodeValue();
+            }
+            String filterConcatenation = filterPIDDescription + " input size " + filterSize;
+
+            if(filterConcatenation.equals(filter.getValue()))// combines values needed for a proper filter ID and checks
+                break;
+        }
+    }
 
     /** adding PA Module options and getting PID for selected Pa Module type **/
     public void getPaPID(){
@@ -568,8 +547,7 @@ public class Controller implements Initializable {
 
             }
         }
-
-}
+    }
 
     /** event for when the tpo is changed-- checks for compatibility with transmitter **/
     public void tpoChange_addTX(){
@@ -668,6 +646,7 @@ public class Controller implements Initializable {
             }
         }
     }
+
     /** event for when a value entered for channel text box is 1 or blank or greater than 83- changes value to 1 as default **/
     public void channelChanged(){
         if(channel.getText().equals("") || Integer.parseInt(channel.getText())<1 || Integer.parseInt(channel.getText())>83){
@@ -675,6 +654,7 @@ public class Controller implements Initializable {
              return;
         }
     }
+
     /** event that checks if all information is filled out **/
     public void genRepCheck(){
         if (tx_cb.getValue() == null || paModules.getValue() == null || mainExciterSW.getValue() == null

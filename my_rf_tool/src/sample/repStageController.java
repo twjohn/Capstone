@@ -1,46 +1,20 @@
 package sample;
 
-import com.sun.javafx.geom.Rectangle;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
-import javafx.util.Callback;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
-
-import static javafx.stage.Screen.getPrimary;
 
 public class repStageController implements Initializable {
 
@@ -49,7 +23,7 @@ public class repStageController implements Initializable {
     private Parent parent;
 
     /**
-     * access Controller from repstageController
+     * access Controller from repStageController
      **/
     private Controller report = new Controller();
 
@@ -63,39 +37,36 @@ public class repStageController implements Initializable {
         TableColumn quantity = new TableColumn("Quantity"); /** product description column **/
 
         itemReport.getColumns().addAll(numberCol, pid, piddesc, quantity);
-        /***************************************************************
+        /**
          * retrieve values from main scene and display them onto console*
          * will later make this be put into the tableview for this scene*
-         ***************************************************************/
+         **/
 
         /** Allows to access values from other controller **/
         FXMLLoader newScene = new FXMLLoader();
         newScene.setLocation(getClass().getResource("Main.fxml"));
 
-        try {
-            parent = newScene.load();
-        } catch (IOException e) {
-        }/** test new scene, throw exception if it fails **/
+        try { parent = newScene.load(); } catch (IOException e) { }/** test new scene, throw exception if it fails **/
 
         if (parent != null) {/** executes if new scene loaded properly **/
             report = newScene.getController(); /** get main scene controller **/
 
             /** outputting received values to console **/
-            System.out.println(report.txSelection);
-            System.out.println(report.SWPID);
-            System.out.println(report.selectedSWDescription);
-            System.out.println(report.filterPID);
-            System.out.println(report.selectedFilterDescription);
-            System.out.println(report.paModulePID);
-            System.out.println(report.selectedPADescription);
+            System.out.println(Controller.txSelection);
+            System.out.println(Controller.SWPID);
+            System.out.println(Controller.selectedSWDescription);
+            System.out.println(Controller.filterPID);
+            System.out.println(Controller.selectedFilterDescription);
+            System.out.println(Controller.paModulePID);
+            System.out.println(Controller.selectedPADescription);
 
             /** create observable array list for table insertion **/
             ObservableList<Report> data = FXCollections.observableArrayList(/** add items to array list **/
                     //new Report();
-                    new Report(report.txSelection, report.txSelection),//transmitter info
-                    new Report(report.SWPID, report.selectedSWDescription),//exciter software
-                    new Report(report.filterPID, report.selectedFilterDescription),//filter info
-                    new Report(report.paModulePID, report.selectedPADescription),//pa module info
+                    new Report(Controller.txSelection, Controller.txSelection),//transmitter info
+                    new Report(Controller.SWPID, Controller.selectedSWDescription),//exciter software
+                    new Report(Controller.filterPID, Controller.selectedFilterDescription),//filter info
+                    new Report(Controller.paModulePID, Controller.selectedPADescription),//pa module info
                     new Report("arbitrary info", "arbitrary info")
                     /** other info to be added here soon **/
             );
@@ -122,14 +93,15 @@ public class repStageController implements Initializable {
 
             itemReport.setItems(data); /** adds data to table **/
 
-
-            /****************************** DIAGRAMMING *******************************/
+            /**
+             *  DIAGRAMMING
+             **/
 
             /** initial coordinates for diagram objects **/
             double vPos = 1100, hPos = 500;
 
             GraphicsContext gc = diagram.getGraphicsContext2D();
-            for (int i = 0; i < report.txSelectionCabinets; i++) {
+            for (int i = 0; i < Controller.txSelectionCabinets; i++) {
 
                 /** argument clarification for strokePolygon();
                  * first arr in strokePolygon is for horizontal alignment
@@ -141,17 +113,21 @@ public class repStageController implements Initializable {
                  *                      index 1 = center
                  *                      index 2 = right
                  * last integer argument in for number of points, in this case, 3 for a triangle
-                 */
+                 **/
 
                 /** create cabinet and place numeric value in cabinet(1=cabinet 1 and so on) **/
                 gc.strokePolygon(new double[]{hPos - 25, hPos + 25, hPos + 75}, new double[]{vPos + 100, vPos, vPos + 100}, 3);
                 gc.strokeText(Integer.toString(i + 1), hPos + 20, vPos + 70);
+                if(i==0)
+                    gc.strokeText("CABINETS",hPos - 110, vPos + 55);
 
                 /** create line from cabinet to low pass filter **/
                 gc.strokeLine(hPos + 25, vPos, hPos + 25, vPos - 25);
 
                 /** low pass + pre coupler **/
                 gc.strokeRect(hPos, vPos - 125, 50, 100);/** low pass rectangle **/
+                if(i==0)
+                    gc.strokeText("LOW PASS FILTER",hPos - 110, vPos - 75);
 
                 /** low pass details **/
                 gc.strokeLine(hPos + 20, vPos - 50, hPos + 20, vPos - 85);
@@ -159,12 +135,16 @@ public class repStageController implements Initializable {
 
                 /** call createCoupler() to create coupler visual **/
                 createCoupler(gc, hPos, vPos - 175);
+                if(i==0)
+                    gc.strokeText("PRE COUPLER",hPos - 110, vPos - 160);
 
                 /** pre coupler to mask filter **/
                 gc.strokeLine(hPos + 25, vPos - 125, hPos + 25, vPos - 200);
 
                 /** mask filter + post coupler **/
                 gc.strokeRect(hPos, vPos - 300, 50, 100);/** mask filter rectangle square **/
+                if(i==0)
+                    gc.strokeText("MASK FILTER",hPos - 110, vPos - 250);
 
                 /** mask filter details **/
                 gc.strokeLine(hPos + 20, vPos - 262.5, hPos + 40, vPos - 287.5);
@@ -173,35 +153,41 @@ public class repStageController implements Initializable {
 
                 /** call createCoupler() to create coupler visual **/
                 createCoupler(gc, hPos, vPos - 350);
+                if(i==0)
+                    gc.strokeText("POST COUPLER",hPos - 110, vPos - 335);
 
-                /** pre coupler and onward **/
+                /** post coupler and onward **/
                 gc.strokeLine(hPos + 25, vPos - 300, hPos + 25, vPos - 375);
                 gc.stroke();
 
                 /** hybrid combiners **/
-                if (report.txSelectionCabinets != 1) {
+                if (Controller.txSelectionCabinets != 1) {
                     /** line that extends from post coupler to hybrid combiner **/
                     gc.strokeLine(hPos + 25, vPos - 375, hPos + 25, vPos - 400);
                 }
 
-                if (report.txSelectionCabinets > i + 1)/** if cabinets > 1, cabinet one will be attached to combiner **/
+                if (Controller.txSelectionCabinets > i + 1) {/** if cabinets > 1, cabinet one will be attached to combiner **/
                     if ((i + 1 == 1)) {
 
                         /** call createHybridCombiner() to create hybrid combiner visual **/
                         createHybridCombiner(gc, hPos, vPos - 450, i);
+                        gc.strokeText("HYBRID COMBINER",hPos-110, vPos - 412.5);
 
                         /** call createRejectLoad() to create reject load visual **/
                         createRejectLoad(gc, hPos + 25, vPos - 475, hPos - 25, vPos - 475);
-                    }
-
-                if (i + 1 == 2) {
-                    if (report.txSelectionCabinets == 2) {/**add coupler to left side of combiner when number of cabinets = 2 **/
-                        /** call createCoupler() to create coupler visual **/
-                        createCoupler(gc, hPos, vPos - 500);
+                        gc.strokeText("REJECT LOAD",hPos - 185, vPos - 475);
                     }
                 }
 
-                if (report.txSelectionCabinets == 3) {
+                if (i + 1 == 2) {
+                    if (Controller.txSelectionCabinets == 2) {/**add coupler to left side of combiner when number of cabinets = 2 **/
+                        /** call createCoupler() to create coupler visual **/
+                        createCoupler(gc, hPos, vPos - 500);
+                        gc.strokeText("POST COUPLER",hPos - 110, vPos - 485);
+                    }
+                }
+
+                if (Controller.txSelectionCabinets == 3) {
                     if (i + 1 == 2) {
 
                         /** call createHybridCombiner() to create hybrid combiner visual **/
@@ -209,6 +195,7 @@ public class repStageController implements Initializable {
 
                         /** call createCoupler() to create coupler visual **/
                         createCoupler(gc, hPos, vPos - 600);
+                        gc.strokeText("POST COUPLER",hPos - 110, vPos - 585);
                     }
                     if (i + 1 == 3) {
 
@@ -219,7 +206,7 @@ public class repStageController implements Initializable {
                         createRejectLoad(gc, hPos + 25, vPos - 575, hPos + 75, vPos - 575);
                     }
                 }
-                if (report.txSelectionCabinets == 4) {
+                if (Controller.txSelectionCabinets == 4) {
                     if (i + 1 == 2) {
 
                         /** call createHybridCombiner() to create hybrid combiner visual **/
@@ -227,6 +214,7 @@ public class repStageController implements Initializable {
 
                         /** call createCoupler() to create coupler visual **/
                         createCoupler(gc, hPos, vPos - 600);
+                        gc.strokeText("POST COUPLER",hPos - 110, vPos - 585);
 
                     }
                     if (i + 1 == 3) {
@@ -244,7 +232,7 @@ public class repStageController implements Initializable {
                     }
                 }
 
-                if (report.txSelectionCabinets == 5) {
+                if (Controller.txSelectionCabinets == 5) {
                     if (i + 1 == 2) {
 
                         /** call createHybridCombiner() to create hybrid combiner visual **/
@@ -261,6 +249,7 @@ public class repStageController implements Initializable {
 
                         /** call createCoupler() to create coupler visual **/
                         createCoupler(gc, hPos, vPos - 700);
+                        gc.strokeText("POST COUPLER",hPos - 110, vPos - 685);
                     }
                     if (i + 1 == 4) {
 
@@ -371,10 +360,7 @@ public class repStageController implements Initializable {
         FXMLLoader newScene = new FXMLLoader();
         newScene.setLocation(getClass().getResource("Main.fxml"));
 
-        try {
-            parent = newScene.load();
-        } catch (IOException e) {
-        }/** test new scene, throw exception if it fails **/
+        try { parent = newScene.load(); } catch (IOException e) { }/** test new scene, throw exception if it fails **/
 
         if (parent != null) {/** executes if new scene loaded properly **/
             report = newScene.getController(); /** get main scene controller **/
@@ -386,13 +372,13 @@ public class repStageController implements Initializable {
             gc.strokeLine(hPos1 + 25, vPos1 + 50, hPos1 + 150, vPos1 + 25);    /** / **/
             if (index == 0)
                 gc.strokeLine(hPos1 + 150, vPos1 + 25, hPos1 + 150, vPos1 - 50);
-            else if (report.txSelectionCabinets == 5)
+            else if (Controller.txSelectionCabinets == 5)
                 gc.strokeLine(hPos1 + 150, vPos1 + 25, hPos1 + 150, vPos1 - 50);
             else
                 gc.strokeLine(hPos1 + 150, vPos1 + 25, hPos1 + 150, vPos1 - 25);
 
             gc.strokeLine(hPos1 + 150, vPos1 + 50, hPos1 + 25, vPos1 + 25); /** \ **/
-            if ((report.txSelectionCabinets >= 3 && index == 1) && report.txSelectionCabinets != 5)
+            if ((Controller.txSelectionCabinets >= 3 && index == 1) && Controller.txSelectionCabinets != 5)
                 gc.strokeLine(hPos1 + 25, vPos1 + 25, hPos1 + 25, vPos1 - 50);
             else
                 gc.strokeLine(hPos1 + 25, vPos1 + 25, hPos1 + 25, vPos1 - 25);
