@@ -69,8 +69,9 @@ public class repStageController implements Initializable {
             piddesc.setCellValueFactory(new PropertyValueFactory<Report, String>("Piddesc")); /** ties columns and info together for piddesc **/
 
             /** auto increment row number-- calls call() function**/
-            numberCol.setCellFactory(sample.repStageController::call);
 
+            numberCol.setCellFactory(repStageController::call);
+            
             itemReport.setItems(data); /** adds data to table **/
 
             /** call create diagram function to begin putting together RF Flow Diagram **/

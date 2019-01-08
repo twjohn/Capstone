@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <PATypeExciterControl>
-	
 	<ExciterSW>
 		<PID>XTE-SW-AT-1-2</PID>
 		<PIDDESCRIPTION>XTE ATSC1.0/2.0 Modulation Software</PIDDESCRIPTION>
@@ -78,6 +77,4 @@
 		<PID>GPS-ANT-KIT-N30</PID>
 		<PIDDESCRIPTION>GPS ANTENNA 10FT CABLE</PIDDESCRIPTION>
 	</GPS>
-
-	
 </PATypeExciterControl>
