@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -95,25 +96,20 @@ public class Controller implements Initializable {
         paModules.getSelectionModel().selectFirst(); /** Automatically picks first selection for paModules **/
 
         /***************** channel textbox input checker(allows integers only) *****************/
-        channel.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d*")) channel.setText(newValue.replaceAll("[^\\d]", ""));
-            }
+        channel.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) channel.setText(newValue.replaceAll("[^\\d]", ""));
         });
 
         /***************** tpo textbox input checker(allows decimal numbers and integers) *****************/
-        tpo.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d*")) tpo.setText(newValue.replaceAll("[^\\d.]", ""));
-            }
+        tpo.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) tpo.setText(newValue.replaceAll("[^\\d.]", ""));
         });
         /********************** END non-numerical input checker **********************/
 
         //print out that RF Tool is loading
         System.out.println("Loading RF Tool...");
         System.out.println(" ");    //just adding some space for clarity on console print out
+
         tpoChange_addTX(); // auto-populates transmitter combo box
 
     }
@@ -415,7 +411,7 @@ public class Controller implements Initializable {
         Document loadsDocument = null;
 
         try { loadsDocument = SWIPBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\pa_exciter_control.xml")); }
-        catch (SAXException e) { e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); }
+        catch (SAXException | IOException e) { e.printStackTrace(); }
 
         List<sample.Loads> exciterSW = new ArrayList<sample.Loads>();
         NodeList loadsNodeList = loadsDocument.getDocumentElement().getChildNodes();
@@ -442,8 +438,8 @@ public class Controller implements Initializable {
         catch (ParserConfigurationException e) { e.printStackTrace(); }
 
         Document filterDocument = null;
-        try { filterDocument = filterBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\maskFiltersCouplers.xml")); }
-        catch (SAXException e) { e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); }
+        try { filterDocument = Objects.requireNonNull(filterBuilder).parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\maskFiltersCouplers.xml")); }
+        catch (SAXException | IOException e) { e.printStackTrace(); }
 
         List<sample.Filtering> theFilters = new ArrayList<sample.Filtering>();
         NodeList filtersNodeList = filterDocument.getDocumentElement().getChildNodes();
@@ -552,7 +548,6 @@ public class Controller implements Initializable {
     /** event for when the tpo is changed-- checks for compatibility with transmitter **/
     public void tpoChange_addTX(){
 
-
         if(tpo.getText().equals("")|| tpo.getText().equals("0")){ // prevent input of anything 0 and below and blank
             tx_cb.getItems().clear();
             tx_cb.setPromptText("Select Transmitter");
@@ -649,21 +644,18 @@ public class Controller implements Initializable {
 
     /** event for when a value entered for channel text box is 1 or blank or greater than 83- changes value to 1 as default **/
     public void channelChanged(){
-        if(channel.getText().equals("") || Integer.parseInt(channel.getText())<1 || Integer.parseInt(channel.getText())>83){
+        if(channel.getText().equals("") || Integer.parseInt(channel.getText())<1 || Integer.parseInt(channel.getText())>83)
             channel.setText("1");
-             return;
-        }
     }
 
     /** event that checks if all information is filled out **/
     public void genRepCheck(){
         if (tx_cb.getValue() == null || paModules.getValue() == null || mainExciterSW.getValue() == null
-                || filter.getValue() == null || switchPatch.getValue() == null || testLoad.getValue() == null || mainAntFeed.getValue() == null) {
+                || filter.getValue() == null || switchPatch.getValue() == null || testLoad.getValue() == null
+                || mainAntFeed.getValue() == null)
             genRep.setDisable(true);
-        }
-        else {
+        else
             genRep.setDisable(false);
-        }
     }
 }
 
