@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -95,25 +96,20 @@ public class Controller implements Initializable {
         paModules.getSelectionModel().selectFirst(); /** Automatically picks first selection for paModules **/
 
         /***************** channel textbox input checker(allows integers only) *****************/
-        channel.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d*")) channel.setText(newValue.replaceAll("[^\\d]", ""));
-            }
+        channel.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) channel.setText(newValue.replaceAll("[^\\d]", ""));
         });
 
         /***************** tpo textbox input checker(allows decimal numbers and integers) *****************/
-        tpo.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d*")) tpo.setText(newValue.replaceAll("[^\\d.]", ""));
-            }
+        tpo.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) tpo.setText(newValue.replaceAll("[^\\d.]", ""));
         });
         /********************** END non-numerical input checker **********************/
 
         //print out that RF Tool is loading
         System.out.println("Loading RF Tool...");
         System.out.println(" ");    //just adding some space for clarity on console print out
+
         tpoChange_addTX(); // auto-populates transmitter combo box
 
     }
@@ -126,39 +122,39 @@ public class Controller implements Initializable {
             //conditional to tell if enough information was provide to construct a rf diagram/report
             return;
         } else{
-                try {/** when genRep button is clicked, a event occurs and opens a new window, if unable to open, a error is caught **/
+            try {/** when genRep button is clicked, a event occurs and opens a new window, if unable to open, a error is caught **/
 
-                    /** get needed product ID's (PID) **/
-                    getSwPID();
-                    getFilterPID();
-                    getPaPID();
+                /** get needed product ID's (PID) **/
+                getSwPID();
+                getFilterPID();
+                getPaPID();
 
-                    /** get selected values to pass to new window **/
-                    selectedSWDescription = (String)mainExciterSW.getValue();
-                    selectedFilterDescription = (String)filter.getValue();
-                    selectedPADescription = (String)paModules.getValue();
-                    txSelection = (String)tx_cb.getValue();
-                    txSelectionCabinets = cabinets;
+                /** get selected values to pass to new window **/
+                selectedSWDescription = (String)mainExciterSW.getValue();
+                selectedFilterDescription = (String)filter.getValue();
+                selectedPADescription = (String)paModules.getValue();
+                txSelection = (String)tx_cb.getValue();
+                txSelectionCabinets = cabinets;
 
-                    /** load a new scene **/
-                    FXMLLoader fxmlLoader = new FXMLLoader();
-                    fxmlLoader.setLocation(getClass().getResource("repStage.fxml"));
-                    Scene scene = new Scene(fxmlLoader.load(), 700, 800);
-                    Stage stage = new Stage();
-                    stage.setTitle("Generated report");
-                    stage.setScene(scene);
-                    stage.setMaximized(true);
-                    stage.show();
-                } catch (IOException e) {/** catch error opening window **/
-                    Logger logger = Logger.getLogger(getClass().getName());
-                    logger.log(Level.SEVERE, "Failed to create generate report.", e);
-                }
+                /** load a new scene **/
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("repStage.fxml"));
+                Scene scene = new Scene(fxmlLoader.load(), 700, 800);
+                Stage stage = new Stage();
+                stage.setTitle("Generated report");
+                stage.setScene(scene);
+                stage.setMaximized(true);
+                stage.show();
+            } catch (IOException e) {/** catch error opening window **/
+                Logger logger = Logger.getLogger(getClass().getName());
+                logger.log(Level.SEVERE, "Failed to create generate report.", e);
+            }
             /** displays and opens new window when proper input is detected for all cases **/
             return;
         }
     }
 
-     /** simple method to check if tpo textfield is empty and sets focus to it **/
+    /** simple method to check if tpo textfield is empty and sets focus to it **/
     public void tpoCheck() {
         if (tpo.getText().isEmpty()) {
             tpo.selectAll();
@@ -391,19 +387,19 @@ public class Controller implements Initializable {
         mainExciterSW.getItems().clear();
         NodeList SWNodeList = mainExciterSWDocument.getDocumentElement().getChildNodes();
 
-            for (int j = 0; j < SWNodeList.getLength(); j++) {
-                Node SWNode = SWNodeList.item(j);
-                if (SWNode.getNodeType() == SWNode.ELEMENT_NODE) {
-                    Element swElement = (Element) SWNode;
+        for (int j = 0; j < SWNodeList.getLength(); j++) {
+            Node SWNode = SWNodeList.item(j);
+            if (SWNode.getNodeType() == SWNode.ELEMENT_NODE) {
+                Element swElement = (Element) SWNode;
 
-                        SWPIDDESCRIPTION = swElement.getElementsByTagName("PIDDESCRIPTION").item(0).getChildNodes().item(0).getNodeValue();
+                SWPIDDESCRIPTION = swElement.getElementsByTagName("PIDDESCRIPTION").item(0).getChildNodes().item(0).getNodeValue();
 
-                        if(SWPIDDESCRIPTION.equals("MODULE PA WIDEBAND (TYPE D)(47-750MHz)"))
-                            break;
-                        mainExciterSW.getItems().add(SWPIDDESCRIPTION);
-                }
+                if(SWPIDDESCRIPTION.equals("MODULE PA WIDEBAND (TYPE D)(47-750MHz)"))
+                    break;
+                mainExciterSW.getItems().add(SWPIDDESCRIPTION);
             }
         }
+    }
     public void getSwPID(){
 
         DocumentBuilderFactory SWIPFactory = DocumentBuilderFactory.newInstance();
@@ -415,7 +411,7 @@ public class Controller implements Initializable {
         Document loadsDocument = null;
 
         try { loadsDocument = SWIPBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\pa_exciter_control.xml")); }
-        catch (SAXException e) { e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); }
+        catch (SAXException | IOException e) { e.printStackTrace(); }
 
         List<sample.Loads> exciterSW = new ArrayList<sample.Loads>();
         NodeList loadsNodeList = loadsDocument.getDocumentElement().getChildNodes();
@@ -442,8 +438,8 @@ public class Controller implements Initializable {
         catch (ParserConfigurationException e) { e.printStackTrace(); }
 
         Document filterDocument = null;
-        try { filterDocument = filterBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\maskFiltersCouplers.xml")); }
-        catch (SAXException e) { e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); }
+        try { filterDocument = Objects.requireNonNull(filterBuilder).parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\maskFiltersCouplers.xml")); }
+        catch (SAXException | IOException e) { e.printStackTrace(); }
 
         List<sample.Filtering> theFilters = new ArrayList<sample.Filtering>();
         NodeList filtersNodeList = filterDocument.getDocumentElement().getChildNodes();
@@ -495,32 +491,32 @@ public class Controller implements Initializable {
 
     /** adding PA Module options and getting PID for selected Pa Module type **/
     public void getPaPID(){
-    DocumentBuilderFactory PAModuleFactory = DocumentBuilderFactory.newInstance();
-    DocumentBuilder PAModuleBuilder = null;
+        DocumentBuilderFactory PAModuleFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder PAModuleBuilder = null;
 
-    try { PAModuleBuilder = PAModuleFactory.newDocumentBuilder(); }
-    catch (ParserConfigurationException e) { e.printStackTrace(); }
+        try { PAModuleBuilder = PAModuleFactory.newDocumentBuilder(); }
+        catch (ParserConfigurationException e) { e.printStackTrace(); }
 
-    Document mainExciterSWDocument = null;
-    try { mainExciterSWDocument = PAModuleBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\pa_exciter_control.xml")); }
-    catch (SAXException e) { e.printStackTrace(); }
-    catch (IOException e) { e.printStackTrace(); }
+        Document mainExciterSWDocument = null;
+        try { mainExciterSWDocument = PAModuleBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\pa_exciter_control.xml")); }
+        catch (SAXException e) { e.printStackTrace(); }
+        catch (IOException e) { e.printStackTrace(); }
 
-    NodeList SWNodeList = mainExciterSWDocument.getDocumentElement().getChildNodes();
+        NodeList SWNodeList = mainExciterSWDocument.getDocumentElement().getChildNodes();
 
-    for (int j = 0; j < SWNodeList.getLength(); j++) {
-        Node SWNode = SWNodeList.item(j);
-        if (SWNode.getNodeType() == SWNode.ELEMENT_NODE) {
-            Element swElement = (Element) SWNode;
+        for (int j = 0; j < SWNodeList.getLength(); j++) {
+            Node SWNode = SWNodeList.item(j);
+            if (SWNode.getNodeType() == SWNode.ELEMENT_NODE) {
+                Element swElement = (Element) SWNode;
 
-            paModuleDescription = swElement.getElementsByTagName("PIDDESCRIPTION").item(0).getChildNodes().item(0).getNodeValue();
-            paModulePID = swElement.getElementsByTagName("PID").item(0).getChildNodes().item(0).getNodeValue();
-            if(paModuleDescription.equals(paModules.getValue()))
-                break;
+                paModuleDescription = swElement.getElementsByTagName("PIDDESCRIPTION").item(0).getChildNodes().item(0).getNodeValue();
+                paModulePID = swElement.getElementsByTagName("PID").item(0).getChildNodes().item(0).getNodeValue();
+                if(paModuleDescription.equals(paModules.getValue()))
+                    break;
 
+            }
         }
     }
-}
     public void addPAModules(){
         DocumentBuilderFactory PAModuleFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder PAModuleBuilder = null;
@@ -551,7 +547,6 @@ public class Controller implements Initializable {
 
     /** event for when the tpo is changed-- checks for compatibility with transmitter **/
     public void tpoChange_addTX(){
-
 
         if(tpo.getText().equals("")|| tpo.getText().equals("0")){ // prevent input of anything 0 and below and blank
             tx_cb.getItems().clear();
@@ -649,21 +644,17 @@ public class Controller implements Initializable {
 
     /** event for when a value entered for channel text box is 1 or blank or greater than 83- changes value to 1 as default **/
     public void channelChanged(){
-        if(channel.getText().equals("") || Integer.parseInt(channel.getText())<1 || Integer.parseInt(channel.getText())>83){
+        if(channel.getText().equals("") || Integer.parseInt(channel.getText())<1 || Integer.parseInt(channel.getText())>83)
             channel.setText("1");
-             return;
-        }
     }
 
     /** event that checks if all information is filled out **/
     public void genRepCheck(){
         if (tx_cb.getValue() == null || paModules.getValue() == null || mainExciterSW.getValue() == null
-                || filter.getValue() == null || switchPatch.getValue() == null || testLoad.getValue() == null || mainAntFeed.getValue() == null) {
+                || filter.getValue() == null || switchPatch.getValue() == null || testLoad.getValue() == null
+                || mainAntFeed.getValue() == null)
             genRep.setDisable(true);
-        }
-        else {
+        else
             genRep.setDisable(false);
-        }
     }
 }
-
