@@ -23,7 +23,7 @@
                <center>
                   <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <content>
-                        <Canvas fx:id="diagram" height="1300.0" width="1600.0" />
+                        <Canvas fx:id="diagram" height="2000.0" width="2000.0" />
                      </content>
                   </ScrollPane>
                </center>

@@ -468,7 +468,7 @@ public class Controller implements Initializable {
     }/** called in getSelectedTXInfo **/
     public void getSwitchPID(){
         /** add code to get switch PID **/
-    }/** called in genNewRep **/
+    }/** INCOMPLETE called in genNewRep **/
 
     /** adding test load options and getting PID for selected test load **/
     public void addTestLoads(){
@@ -663,12 +663,19 @@ public class Controller implements Initializable {
 
         /** call addTX() to populate TX combo box with compatible transmitters for selected TPO **/
         addTX();
+        System.out.println("New TPO: "+tpo.getText());
     }
 
     /** event for when a value entered for channel text box is 1 or blank or greater than 83- changes value to 1 as default **/
     public void channelChanged(){
-        if(channel.getText().equals("") || Integer.parseInt(channel.getText())<1 || Integer.parseInt(channel.getText())>83)
+        if(channel.getText().equals("") || Integer.parseInt(channel.getText())<1 || Integer.parseInt(channel.getText())>83){
+            System.out.println("Channel out of range! resetting to channel 1...");
             channel.setText("1");
+            System.out.println("New Channel: "+channel.getText());
+        }
+        else
+            System.out.println("New Channel: "+channel.getText());
+
     }
 
     /** event that checks if all information is filled out **/
@@ -679,6 +686,14 @@ public class Controller implements Initializable {
             genRep.setDisable(true);
         else
             genRep.setDisable(false);
+    }
+
+    /** event for when dual exciters checkbox is selected **/
+    public void selectDualExciters(){
+        if(checkDualExciters())
+            System.out.println("Dual Exciters Checked");
+        else
+            System.out.println("Dual Exciters Unchecked");
     }
 }
 

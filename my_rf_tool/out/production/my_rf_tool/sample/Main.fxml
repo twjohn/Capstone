@@ -91,7 +91,7 @@
                         <DropShadow height="5.0" radius="2.0" width="5.0" />
                      </effect>
             </ComboBox>
-            <CheckBox fx:id="dualExciter" contentDisplay="CENTER" mnemonicParsing="false" onContextMenuRequested="#genRepCheck" onMouseClicked="#genRepCheck" onMouseEntered="#genRepCheck" onMousePressed="#genRepCheck" onMouseReleased="#genRepCheck" prefWidth="190.0" text="Dual Exciters" HBox.margin="$x3" />
+            <CheckBox fx:id="dualExciter" contentDisplay="CENTER" mnemonicParsing="false" onAction="#selectDualExciters" onContextMenuRequested="#genRepCheck" onMouseClicked="#genRepCheck" onMouseEntered="#genRepCheck" onMousePressed="#genRepCheck" onMouseReleased="#genRepCheck" prefWidth="190.0" text="Dual Exciters" HBox.margin="$x3" />
             <ComboBox fx:id="mainAntFeed" onAction="#genRepCheck" onContextMenuRequested="#genRepCheck" onMouseClicked="#genRepCheck" onMouseEntered="#genRepCheck" onMousePressed="#genRepCheck" onMouseReleased="#genRepCheck" prefHeight="31.0" prefWidth="190.0" promptText="Main Antenna Feed" HBox.margin="$x3">
               <items>
                 <FXCollections fx:factory="observableArrayList">
