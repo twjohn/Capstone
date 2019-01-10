@@ -15,7 +15,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Screen;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -24,13 +23,14 @@ public class repStageController implements Initializable {
 
     public TableView itemReport;
     public Canvas diagram;
-    private Parent parent;
+    //private Parent parent;
     private GraphicsContext gc;
+
+    /** increment diagram index **/
     private int diagramIndex;
-    private double finalVerticalPos = 0;
 
     /********** access Controller from repStageController **********/
-    private Controller report = new Controller();
+    //private Controller report = new Controller();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -48,19 +48,20 @@ public class repStageController implements Initializable {
         itemReport.getColumns().addAll(numberCol, pid, piddesc, quantity);
         /**
          * retrieve values from main scene and display them onto console*
-         * will later make this be put into the tableview for this scene*
+         * will later make this be put into the table view for this scene*
          **/
 
         /** Allows to access values from other controller **/
-        FXMLLoader newScene = new FXMLLoader();
-        newScene.setLocation(getClass().getResource("Main.fxml"));
+        //FXMLLoader newScene = new FXMLLoader();
+        //newScene.setLocation(getClass().getResource("Main.fxml"));
 
-        try { parent = newScene.load(); } catch (IOException e) { }/** test new scene, throw exception if it fails **/
+        //try { parent = newScene.load(); } catch (IOException e) { }/** test new scene, throw exception if it fails **/
 
-        if (parent != null) {/** executes if new scene loaded properly **/
-            report = newScene.getController(); /** get main scene controller **/
+        //if (parent != null) {/** executes if new scene loaded properly **/
+        //    report = newScene.getController(); /** get main scene controller **/
 
             /** outputting received values to console **/
+            System.out.println("\n--------------------------------------");
             System.out.println("Transmitter selection: "+Controller.txSelection);
             System.out.println("Description: "+Controller.selectedSWDescription+"     Product ID: "+Controller.SWPID);
             System.out.println("Description: "+Controller.selectedFilterDescription+"     Product ID: "+Controller.filterPID);
@@ -88,7 +89,6 @@ public class repStageController implements Initializable {
 
             /** call create diagram function to begin putting together RF Flow Diagram **/
             createDiagram();
-        }
     }
 
     /** function that utilizes lambda notation to auto increment table rows **/
@@ -159,7 +159,7 @@ public class repStageController implements Initializable {
             gc.strokePolygon(new double[]{hPos - 25, hPos + 25, hPos + 75}, new double[]{vPos + 100, vPos, vPos + 100}, 3);
             gc.strokeText(Integer.toString(diagramIndex + 1), hPos + 20, vPos + 70);
             if(diagramIndex==0)
-                gc.strokeText("CABINETS \nTX MODEL: "+report.txSelection,hPos - 135, vPos + 55);
+                gc.strokeText("CABINETS \nTX MODEL: "+Controller.txSelection,hPos - 135, vPos + 55);
 
             /** create line from cabinet to low pass filter **/
             gc.strokeLine(hPos + 25, vPos, hPos + 25, vPos - 25);
@@ -321,9 +321,6 @@ public class repStageController implements Initializable {
     /********** function to create the reject load visual for the diagram **********/
     private void createRejectLoad(double hPos1, double vPos1) {
 
-        if(finalVerticalPos < vPos1)
-            finalVerticalPos = vPos1;
-
         double vPos2=vPos1, hPos2 = hPos1;
 
         if(diagramIndex == 1 || diagramIndex == 0)/** determines the way reject lead horizontally **/
@@ -378,9 +375,6 @@ public class repStageController implements Initializable {
     /********** function to create coupler visual for diagram **********/
     private void createCoupler(double hPos1, double vPos1) {
 
-        if(finalVerticalPos < vPos1)
-            finalVerticalPos = vPos1;
-
         /** coupler square **/
         gc.strokeRect(hPos1, vPos1, 50, 50);
         /** post coupler details  bottom left**/
@@ -407,8 +401,6 @@ public class repStageController implements Initializable {
     /********** function to create hybrid combiner visual for diagram **********/
     private void createHybridCombiner(double hPos1, double vPos1) {
 
-        if(finalVerticalPos < vPos1)
-            finalVerticalPos = vPos1;
         /** combiner rectangle **/
         gc.strokeRect(hPos1, vPos1, 175, 75);
 

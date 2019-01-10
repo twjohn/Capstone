@@ -379,10 +379,8 @@ public class Controller implements Initializable {
             if (SWNode.getNodeType() == SWNode.ELEMENT_NODE) {
                 Element swElement = (Element) SWNode;
 
-
                 paModuleDescription = swElement.getElementsByTagName("PIDDESCRIPTION").item(0).getChildNodes().item(0).getNodeValue();
 
-                System.out.println(paModuleDescription.charAt(0));
                 if(paModuleDescription.charAt(0) !='M' && paModuleDescription.charAt(1) != 'O'
                     && paModuleDescription.charAt(2) != 'D' && paModuleDescription.charAt(3) != 'U'
                     && paModuleDescription.charAt(4) != 'L'&& paModuleDescription.charAt(5) != 'E')
@@ -688,6 +686,9 @@ public class Controller implements Initializable {
 
                                     /**************** EVENT LISTENERS ****************/
 
+    /** event listener that restricts channel text box to integers and restricts TPO text box to doubles
+     * NEED TO STILL FIX IT TO WHERE USER CAN ONLY TYPE ONE DECIMAL INSTEAD OF MULTIPLE
+     **/
     public void textBoxRestrictions(){
 
         /***************** channel textbox input checker(allows integers only) *****************/
@@ -699,6 +700,6 @@ public class Controller implements Initializable {
         tpo.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) tpo.setText(newValue.replaceAll("[^\\d.]", ""));
         });
-    }
+    }/** called in initialize **/
 }
 
