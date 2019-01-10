@@ -102,7 +102,8 @@ public class Controller implements Initializable {
             }
         });
 
-        /********************** START non-numerical input checker **********************/
+        /** call textBoxRestrictions() to check for numerical input on text boxes **/
+        textBoxRestrictions();
 
         tpo.setText("1");/** set default values for tpo textbox **/
 
@@ -113,17 +114,6 @@ public class Controller implements Initializable {
 
         mainExciterSW.getSelectionModel().selectFirst();/** Automatically picks first selection for mainExciterSW **/
         paModules.getSelectionModel().selectFirst(); /** Automatically picks first selection for paModules **/
-
-        /***************** channel textbox input checker(allows integers only) *****************/
-        channel.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) channel.setText(newValue.replaceAll("[^\\d]", ""));
-        });
-
-        /***************** tpo textbox input checker(allows decimal numbers and integers) *****************/
-        tpo.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) tpo.setText(newValue.replaceAll("[^\\d.]", ""));
-        });
-        /********************** END non-numerical input checker **********************/
 
         //print out that RF Tool is loading
         System.out.println("Loading RF Tool...");
@@ -166,7 +156,7 @@ public class Controller implements Initializable {
         // Load the input XML document, parse it and return an instance of the document class. will need to make this work on any computer somehow.
         Document document = null;
         try {
-            document = builder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\test.xml"));
+            document = builder.parse(new File("test.xml"));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -221,7 +211,7 @@ public class Controller implements Initializable {
         catch (ParserConfigurationException e) { e.printStackTrace(); }
 
         Document mainExciterSWDocument = null;
-        try { mainExciterSWDocument = mainExciterSWBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\pa_exciter_control.xml")); }
+        try { mainExciterSWDocument = mainExciterSWBuilder.parse(new File("pa_exciter_control.xml")); }
         catch (SAXException e) { e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); }
 
         mainExciterSW.getItems().clear();
@@ -250,7 +240,7 @@ public class Controller implements Initializable {
 
         Document loadsDocument = null;
 
-        try { loadsDocument = SWIPBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\pa_exciter_control.xml")); }
+        try { loadsDocument = SWIPBuilder.parse(new File("pa_exciter_control.xml")); }
         catch (SAXException | IOException e) { e.printStackTrace(); }
 
         List<sample.Loads> exciterSW = new ArrayList<sample.Loads>();
@@ -291,7 +281,7 @@ public class Controller implements Initializable {
         catch (ParserConfigurationException e) { e.printStackTrace(); }
 
         Document filterDocument = null;
-        try { filterDocument = Objects.requireNonNull(filterBuilder).parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\maskFiltersCouplers.xml")); }
+        try { filterDocument = Objects.requireNonNull(filterBuilder).parse(new File("maskFiltersCouplers.xml")); }
         catch (SAXException | IOException e) { e.printStackTrace(); }
 
         List<sample.Filtering> theFilters = new ArrayList<sample.Filtering>();
@@ -320,7 +310,7 @@ public class Controller implements Initializable {
         catch (ParserConfigurationException e) { e.printStackTrace(); }
 
         Document filterDocument = null;
-        try { filterDocument = filterBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\maskFiltersCouplers.xml")); }
+        try { filterDocument = filterBuilder.parse(new File("maskFiltersCouplers.xml")); }
         catch (SAXException e) { e.printStackTrace(); }
         catch (IOException e) { e.printStackTrace(); }
 
@@ -351,7 +341,7 @@ public class Controller implements Initializable {
     catch (ParserConfigurationException e) { e.printStackTrace(); }
 
     Document mainExciterSWDocument = null;
-    try { mainExciterSWDocument = PAModuleBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\pa_exciter_control.xml")); }
+    try { mainExciterSWDocument = PAModuleBuilder.parse(new File("pa_exciter_control.xml")); }
     catch (SAXException e) { e.printStackTrace(); }
     catch (IOException e) { e.printStackTrace(); }
 
@@ -378,7 +368,7 @@ public class Controller implements Initializable {
         catch (ParserConfigurationException e) { e.printStackTrace(); }
 
         Document mainExciterSWDocument = null;
-        try { mainExciterSWDocument = PAModuleBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\pa_exciter_control.xml")); }
+        try { mainExciterSWDocument = PAModuleBuilder.parse(new File("pa_exciter_control.xml")); }
         catch (SAXException e) { e.printStackTrace(); }
         catch (IOException e) { e.printStackTrace(); }
 
@@ -435,7 +425,7 @@ public class Controller implements Initializable {
             // Load the input XML document, parse it and return an instance of the document class.
             Document switchDocument = null;
             try {
-                switchDocument = switchBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\switches.xml"));
+                switchDocument = switchBuilder.parse(new File("switches.xml"));
             } catch (SAXException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -499,7 +489,7 @@ public class Controller implements Initializable {
             Document loadsDocument = null;
 
             try {
-                loadsDocument = loadsBuilder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\loads.xml"));
+                loadsDocument = loadsBuilder.parse(new File("loads.xml"));
             } catch (SAXException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -538,7 +528,7 @@ public class Controller implements Initializable {
         // Load the input XML document, parse it and return an instance of the document class. will need to make this work on any computer somehow.
         Document document = null;
 
-        try { document = builder.parse(new File("E:\\CapstoneComputingProject(CSC495,496)\\my_rf_tool\\src\\sample\\test.xml")); }
+        try { document = builder.parse(new File("test.xml")); }
         catch (SAXException e) { e.printStackTrace(); }
         catch (IOException e) { e.printStackTrace(); }
 
@@ -694,6 +684,21 @@ public class Controller implements Initializable {
             System.out.println("Dual Exciters Checked");
         else
             System.out.println("Dual Exciters Unchecked");
+    }
+
+                                    /**************** EVENT LISTENERS ****************/
+
+    public void textBoxRestrictions(){
+
+        /***************** channel textbox input checker(allows integers only) *****************/
+        channel.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) channel.setText(newValue.replaceAll("[^\\d]", ""));
+        });
+
+        /***************** tpo textbox input checker(allows decimal numbers and integers) *****************/
+        tpo.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) tpo.setText(newValue.replaceAll("[^\\d.]", ""));
+        });
     }
 }
 
