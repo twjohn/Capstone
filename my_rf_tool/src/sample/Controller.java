@@ -684,22 +684,30 @@ public class Controller implements Initializable {
             System.out.println("Dual Exciters Unchecked");
     }
 
-                                    /**************** EVENT LISTENERS ****************/
 
-    /** event listener that restricts channel text box to integers and restricts TPO text box to doubles
-     * NEED TO STILL FIX IT TO WHERE USER CAN ONLY TYPE ONE DECIMAL INSTEAD OF MULTIPLE
-     **/
+    /** restricts channel text box to integers and restricts TPO text box to doubles **/
     public void textBoxRestrictions(){
 
         /***************** channel textbox input checker(allows integers only) *****************/
-        channel.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) channel.setText(newValue.replaceAll("[^\\d]", ""));
-        });
+        channel.setTextFormatter(new TextFormatter<>((change) -> {
+            String text = change.getControlNewText();
+            if (text.matches("\\d*")) {
+                return change;
+            } else {
+                return null;
+            }
+        }));
 
         /***************** tpo textbox input checker(allows decimal numbers and integers) *****************/
-        tpo.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) tpo.setText(newValue.replaceAll("[^\\d.]", ""));
-        });
+        tpo.setTextFormatter(new TextFormatter<>((change) -> {
+            String text = change.getControlNewText();
+            if (text.matches("\\d*\\.?\\d*")) {
+                return change;
+            } else {
+                return null;
+            }
+        }));
+
     }/** called in initialize **/
 }
 
