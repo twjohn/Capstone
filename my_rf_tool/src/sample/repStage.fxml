@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -9,25 +10,28 @@
 
 <TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.repStageController">
   <tabs>
-    <Tab fx:id="itemRepTab" text="Items Report">
-         <content>
-            <BorderPane prefHeight="200.0" prefWidth="200.0">
-               <center>
-                  <TableView fx:id="itemReport" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-               </center></BorderPane>
-         </content>
-    </Tab>
     <Tab fx:id="diagTab" text="RF Flow Diagram">
          <content>
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <center>
-                  <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                  <ScrollPane fitToHeight="true" pannable="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <content>
-                        <Canvas fx:id="diagram" height="1300.0" width="1600.0" />
+                        <Canvas fx:id="diagram" height="2000.0" width="2000.0" />
                      </content>
                   </ScrollPane>
                </center>
+               <left>
+                  <Button mnemonicParsing="false" onMouseClicked="#exportPDF" text="Export to PDF" BorderPane.alignment="CENTER" />
+               </left>
             </BorderPane>
+         </content>
+    </Tab>
+    <Tab fx:id="itemRepTab" text="Items Report">
+         <content>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <center>
+                  <TableView fx:id="itemReport" prefHeight="500.0" prefWidth="500.0" BorderPane.alignment="CENTER" />
+               </center></BorderPane>
          </content>
     </Tab>
   </tabs>
