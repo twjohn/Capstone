@@ -1,5 +1,4 @@
 package sample;
-
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -36,6 +35,7 @@ public class Controller implements Initializable {
     public ImageView repImage;
     public CheckBox dualExciter;
     public BorderPane main;
+    public static Stage stage = new Stage();
 
     /** vars to hold various info about information needed **/
     private static String ID, linesize;
@@ -67,7 +67,7 @@ public class Controller implements Initializable {
                         int numItems = getListView().getItems().size();
                         int height = 175;    // set the maximum height of the popup
                         if (numItems <= 6) height = numItems *27;    // set the height of the popup if number of items is equal to or less than 6
-                        getListView().setPrefHeight(height);
+                            getListView().setPrefHeight(height);
                         getListView().setPrefWidth(200.0);
                         if (!empty)
                             setText(item);
@@ -90,7 +90,7 @@ public class Controller implements Initializable {
                         int numItems = getListView().getItems().size();
                         int height = 175;    // set the maximum height of the popup
                         if (numItems <= 6) height = numItems *27;    // set the height of the popup if number of items is equal to or less than 6
-                        getListView().setPrefHeight(height);
+                            getListView().setPrefHeight(height);
                         getListView().setPrefWidth(535);
                         if (!empty)
                             setText(item);
@@ -597,8 +597,7 @@ public class Controller implements Initializable {
                 /** load a new scene **/
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("repStage.fxml"));
-                Scene scene = new Scene(fxmlLoader.load(), 700, 800);
-                Stage stage = new Stage();
+                Scene scene = new Scene(fxmlLoader.load(), 1500, 1000);
                 stage.setTitle("Generated report");
                 stage.setScene(scene);
                 stage.setMaximized(true);

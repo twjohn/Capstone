@@ -8,13 +8,14 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
-import javafx.geometry.VPos;
+import javafx.print.*;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Screen;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -23,8 +24,8 @@ public class repStageController implements Initializable {
 
     public TableView itemReport;
     public Canvas diagram;
-    //private Parent parent;
     private GraphicsContext gc;
+    private Button PDF;
 
     /** increment diagram index **/
     private int diagramIndex;
@@ -116,29 +117,31 @@ public class repStageController implements Initializable {
         Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
 
         /** initial coordinates for diagram objects **/
-        double vPos, hPos;
+        double vPos, hPos;// variables that correlate with diagram positions
+
+        /** conditionals to adjust starting position based upon screen size/window size upon starting **/
         if(Controller.txSelectionCabinets == 1) {
-            vPos = 650;
+            vPos = 850;
             hPos= (bounds.getWidth()/2)-25;
         }
         else if(Controller.txSelectionCabinets == 2) {
-            vPos = 700;
+            vPos = 900;
             hPos= (bounds.getWidth()/2) - 93.5;
         }
         else if(Controller.txSelectionCabinets == 3) {
-            vPos = 750;
+            vPos = 1050;
             hPos= (bounds.getWidth()/2) - 124.75;
         }
         else if(Controller.txSelectionCabinets == 4) {
-            vPos = 750;
+            vPos = 1050;
             hPos= (bounds.getWidth()/2) - 156;
         }
         else if(Controller.txSelectionCabinets == 5) {
-            vPos = 800;
+            vPos = 1100;
             hPos= (bounds.getWidth()/2) - 187.25;
         }
         else {
-            vPos = 800;
+            vPos = 1100;
             hPos= (bounds.getWidth()/2) - 187.25;
         }
         for (diagramIndex = 0; diagramIndex < Controller.txSelectionCabinets; diagramIndex++) {
@@ -157,6 +160,7 @@ public class repStageController implements Initializable {
 
             /** create cabinet and place numeric value in cabinet(1=cabinet 1 and so on) **/
             gc.strokePolygon(new double[]{hPos - 25, hPos + 25, hPos + 75}, new double[]{vPos + 100, vPos, vPos + 100}, 3);
+
             gc.strokeText(Integer.toString(diagramIndex + 1), hPos + 20, vPos + 70);
             if(diagramIndex==0)
                 gc.strokeText("CABINETS \nTX MODEL: "+Controller.txSelection,hPos - 135, vPos + 55);
@@ -200,6 +204,9 @@ public class repStageController implements Initializable {
             gc.strokeLine(hPos + 25, vPos - 300, hPos + 25, vPos - 375);
             gc.stroke();
 
+            if(Controller.txSelectionCabinets == 1)
+                createAntenna(hPos+25,vPos-375);
+
             /** hybrid combiners **/
             if (Controller.txSelectionCabinets != 1) {
                 /** line that extends from post coupler to hybrid combiner **/
@@ -224,6 +231,9 @@ public class repStageController implements Initializable {
                     /** call createCoupler() to create coupler visual **/
                     createCoupler(hPos, vPos - 500);
                     gc.strokeText("POST COUPLER",hPos - 110, vPos - 485);
+                    /********************************** CODE ADDED HERE FOR ANTENNA ADDITION******************************/
+                    gc.strokeLine(hPos+25, vPos-700, hPos+25, vPos-500);
+                    createAntenna(hPos+25,vPos-700);
                 }
             }
 
@@ -236,6 +246,9 @@ public class repStageController implements Initializable {
                     /** call createCoupler() to create coupler visual **/
                     createCoupler(hPos, vPos - 600);
                     gc.strokeText("POST COUPLER",hPos - 110, vPos - 585);
+
+                    gc.strokeLine(hPos+25, vPos-800, hPos+25, vPos-600);
+                    createAntenna(hPos+25,vPos-800);
                 }
                 if (diagramIndex + 1 == 3) {
 
@@ -255,6 +268,9 @@ public class repStageController implements Initializable {
                     /** call createCoupler() to create coupler visual **/
                     createCoupler(hPos, vPos - 600);
                     gc.strokeText("POST COUPLER",hPos - 110, vPos - 585);
+
+                    gc.strokeLine(hPos+25, vPos-800, hPos+25, vPos-600);
+                    createAntenna(hPos+25,vPos-800);
 
                 }
                 if (diagramIndex + 1 == 3) {
@@ -290,6 +306,8 @@ public class repStageController implements Initializable {
                     /** call createCoupler() to create coupler visual **/
                     createCoupler(hPos, vPos - 700);
                     gc.strokeText("POST COUPLER",hPos - 110, vPos - 685);
+                    gc.strokeLine(hPos+25, vPos-900, hPos+25, vPos-700);
+                    createAntenna(hPos+25,vPos-900);
                 }
                 if (diagramIndex + 1 == 4) {
 
@@ -425,6 +443,77 @@ public class repStageController implements Initializable {
             gc.strokeLine(hPos1 + 150, vPos1 + 50, hPos1 + 25, vPos1 + 25); /** \ **/
             gc.strokeLine(hPos1 + 25, vPos1 + 25, hPos1 + 25, vPos1 - 50);
         }
+    }
+
+    private void createAntenna(double hPos1, double vPos1){
+        gc.strokeLine(hPos1, vPos1, hPos1 + 50, vPos1);
+        gc.strokeOval(hPos1+42.5, vPos1-7.5, 15,15);
+        gc.strokeLine(hPos1+50, vPos1, hPos1 + 80, vPos1+40);
+        gc.strokeOval(hPos1+72.5, vPos1+32.5, 15,15);
+        gc.strokeLine(hPos1+80,vPos1+40,hPos1+80, vPos1+90);
+        gc.strokeOval(hPos1+72.5, vPos1-47.5, 15,15);
+        gc.strokeOval(hPos1+102.5, vPos1-7.5, 15,15);
+
+        createTestLoad(hPos1+55,vPos1+90);
+    }
+
+    private void createTestLoad(double hPos1, double vPos1){
+        gc.strokeRect(hPos1, vPos1, 50, 100);
+        gc.strokeLine(hPos1+25, vPos1, hPos1+25, vPos1+30);
+        gc.strokeLine(hPos1+25, vPos1+30, hPos1+5, vPos1+35);
+    }
+
+    public void exportDiagramPDF() {
+        System.out.println("Exporting diagram to PDF!");
+        // Create the Printer Job
+        PrinterJob printerJob = PrinterJob.createPrinterJob();
+
+        // Get The Printer Job Settings
+        JobSettings jobSettings = printerJob.getJobSettings();
+
+        PageLayout pageLayout;
+        if (printerJob != null) {
+
+            printerJob.showPrintDialog(Controller.stage);
+
+            // Get The Printer
+            Printer printer = printerJob.getPrinter();
+            // Create the Page Layout of the Printer
+            pageLayout = printer.createPageLayout(Paper.A1, PageOrientation.PORTRAIT,Printer.MarginType.EQUAL);
+            jobSettings.setPageLayout(pageLayout);
+            printerJob.printPage(diagram);
+            printerJob.endJob();
+        }
+        /*** test for later
+         * https://community.oracle.com/thread/2450090
+         */
+    }
+
+    public void exportTablePDF(){
+        System.out.println("Exporting table to PDF!");
+        // Create the Printer Job
+        PrinterJob printerJob = PrinterJob.createPrinterJob();
+
+        // Get The Printer Job Settings
+        JobSettings jobSettings = printerJob.getJobSettings();
+
+        PageLayout pageLayout;
+
+        if (printerJob != null) {
+
+            printerJob.showPrintDialog(Controller.stage);
+
+            // Get The Printer
+            Printer printer = printerJob.getPrinter();
+            // Create the Page Layout of the Printer
+            pageLayout = printer.createPageLayout(Paper.A3, PageOrientation.LANDSCAPE,Printer.MarginType.EQUAL);
+            jobSettings.setPageLayout(pageLayout);
+            printerJob.printPage(itemReport);
+            printerJob.endJob();
+        }
+        /*** test for later
+         * https://community.oracle.com/thread/2450090
+         */
     }
 
 }

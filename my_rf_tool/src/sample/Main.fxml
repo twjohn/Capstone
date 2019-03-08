@@ -102,6 +102,8 @@
                     <String fx:value="6-1/8 75Ω" />
                     <String fx:value="7-3/16" />
                     <String fx:value="8-3/16" />
+                    <String fx:value="WR1500" />
+                    <String fx:value="WR1800" />
                 </FXCollections>
               </items>
                      <effect>
@@ -136,6 +138,8 @@
                     <String fx:value="6-1/8 75Ω" />
                     <String fx:value="7-3/16" />
                     <String fx:value="8-3/16" />
+                    <String fx:value="WR1500" />
+                    <String fx:value="WR1800" />
                 </FXCollections>
               </items>
                      <effect>
