@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<filtering>
+    <Filter>
+        <Power>2500</Power>
+        <Size>1-5/8</Size>
+        <PID>FLUA-02500-6AT</PID>
+        <PIDDESCRIPTION>Reflective ATSC Standard Mask 6Mhz BW, 2500W Air Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>5500</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUA-05500-6AT</PID>
+        <PIDDESCRIPTION>Reflective ATSC Standard Mask 6Mhz BW, 5500W Air Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>8000</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUA-08000-6AT</PID>
+        <PIDDESCRIPTION>Reflective ATSC Standard Mask 6Mhz BW, 8000W Air Cooled Filter</PIDDESCRIPTION>
+        </Filter>
+
+    <Filter>
+        <Power>10000</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUA-10000-6AT</PID>
+        <PIDDESCRIPTION>Reflective ATSC Standard Mask 6Mhz BW, 10000W Air Cooled Filter</PIDDESCRIPTION>
+        </Filter>
+
+    <Filter>
+        <Power>60000</Power>
+        <Size>6-1/8</Size>
+        <PID>FLUA-50000-6AT</PID>
+        <PIDDESCRIPTION>Reflective ATSC Standard Mask 6Mhz BW, 50000-60000W Air Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>5500</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUL-05500-6AT</PID>
+        <PIDDESCRIPTION>Reflective ATSC Standard Mask 6Mhz BW, 5500W Liquid Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>8000</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUL-08000-6AT</PID>
+        <PIDDESCRIPTION>Reflective ATSC Standard Mask 6Mhz BW, 8000W Liquid Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>10000</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUL-10000-6AT</PID>
+        <PIDDESCRIPTION>Reflective ATSC Standard Mask 6Mhz BW, 10000W Liquid Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>12500</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUL-12500-6AT</PID>
+        <PIDDESCRIPTION>Reflective ATSC Standard Mask 6Mhz BW, 12500W Liquid Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>20000</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUL-20000-6AT</PID>
+        <PIDDESCRIPTION>Reflective ATSC Standard Mask 6Mhz BW, 20000W Liquid Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>22000</Power>
+        <Size>4-1/16</Size>
+        <PID>FLUL-22000-6AT</PID>
+        <PIDDESCRIPTION>Reflective ATSC Standard Mask 6Mhz BW, 22000W Liquid Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>50000</Power>
+        <Size>6-1/8</Size>
+        <PID>FLUL-50000-6AT</PID>
+        <PIDDESCRIPTION>Reflective ATSC Standard Mask 6Mhz BW, 50000W Liquid Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>2500</Power>
+        <Size>1-5/8</Size>
+        <PID>FLUA-02500-6AT-6C</PID>
+        <PIDDESCRIPTION>Reflective ATSC Critical Mask, 6 Pole, 6Mhz BW, 2500W Air Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>5500</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUA-05500-6AT-6C</PID>
+        <PIDDESCRIPTION>Reflective ATSC Critical Mask, 6 Pole, 6Mhz BW, 5500W Air Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>5500</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUL-05500-6AT-6C</PID>
+        <PIDDESCRIPTION>Reflective ATSC Critical Mask, 6 Pole, 6Mhz BW, 5500W Liquid Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>8000</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUL-08000-6AT-6C</PID>
+        <PIDDESCRIPTION>Reflective ATSC Critical Mask, 6 Pole, 6Mhz BW, 8000W Liquid Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>10000</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUL-10000-6AT-6C</PID>
+        <PIDDESCRIPTION>Reflective ATSC Critical Mask, 6 Pole, 6Mhz BW, 10000W Liquid Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>12500</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUL-12500-6AT-6C</PID>
+        <PIDDESCRIPTION>Reflective ATSC Critical Mask, 6 Pole, 6Mhz BW, 12500W Liquid Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>2500</Power>
+        <Size>1-5/8</Size>
+        <PID>FLUA-02500-6AT-C</PID>
+        <PIDDESCRIPTION>Reflective ATSC Critical Mask, 8 Pole, 6Mhz BW, 2500W Air Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>5500</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUA-05500-6AT-C</PID>
+        <PIDDESCRIPTION>Reflective ATSC Critical Mask, 8 Pole, 6Mhz BW, 5500W Air Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>10000</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUA-10000-6AT-C</PID>
+        <PIDDESCRIPTION>Reflective ATSC Critical Mask, 8 Pole, 6Mhz BW, 10000W Air Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>5500</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUL-05500-6AT-C</PID>
+        <PIDDESCRIPTION>Reflective ATSC Critical Mask, 8 Pole, 6Mhz BW, 5500W Liquid Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>8000</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUL-08000-6AT-C</PID>
+        <PIDDESCRIPTION>Reflective ATSC Critical Mask, 8 Pole, 6Mhz BW, 8000W Liquid Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>10000</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUL-10000-6AT-C</PID>
+        <PIDDESCRIPTION>Reflective ATSC Critical Mask, 8 Pole, 6Mhz BW, 10000W Liquid Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>12500</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUL-12500-6AT-C</PID>
+        <PIDDESCRIPTION>Reflective ATSC Critical Mask, 8 Pole, 6Mhz BW, 12500W Liquid Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>20000</Power>
+        <Size>3-1/8</Size>
+        <PID>FLUL-20000-6AT-C</PID>
+        <PIDDESCRIPTION>Reflective ATSC Critical Mask, 8 Pole, 6Mhz BW, 20000W Liquid Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+    <Filter>
+        <Power>22000</Power>
+        <Size>4-1/16</Size>
+        <PID>FLUL-22000-6AT-C</PID>
+        <PIDDESCRIPTION>Reflective ATSC Critical Mask, 8 Pole, 6Mhz BW, 22000W Liquid Cooled Filter</PIDDESCRIPTION>
+    </Filter>
+
+
+</filtering>
