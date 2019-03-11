@@ -25,7 +25,6 @@ public class repStageController implements Initializable {
     public TableView itemReport;
     public Canvas diagram;
     private GraphicsContext gc;
-    private Button PDF;
 
     /** increment diagram index **/
     private int diagramIndex;
@@ -160,22 +159,11 @@ public class repStageController implements Initializable {
 
             /** create cabinet and place numeric value in cabinet(1=cabinet 1 and so on) **/
             gc.strokePolygon(new double[]{hPos - 25, hPos + 25, hPos + 75}, new double[]{vPos + 100, vPos, vPos + 100}, 3);
-
-            gc.strokeText(Integer.toString(diagramIndex + 1), hPos + 20, vPos + 70);
+            gc.strokeText(Integer.toString(diagramIndex + 1), hPos + 20, vPos + 70);// cabinet labels(1,2,3, etc...)
             if(diagramIndex==0)
-                gc.strokeText("CABINETS \nTX MODEL: "+Controller.txSelection,hPos - 135, vPos + 55);
-
-            /** create line from cabinet to low pass filter **/
-            gc.strokeLine(hPos + 25, vPos, hPos + 25, vPos - 25);
-
-            /** low pass + pre coupler **/
-            gc.strokeRect(hPos, vPos - 125, 50, 100);/** low pass rectangle **/
-            if(diagramIndex==0)
-                gc.strokeText("LOW PASS FILTER",hPos - 110, vPos - 75);
-
-            /** low pass details **/
-            gc.strokeLine(hPos + 20, vPos - 50, hPos + 20, vPos - 85);
-            gc.strokeLine(hPos + 20, vPos - 85, hPos + 40, vPos - 100);
+                gc.strokeText("CABINETS \nTX MODEL: "+Controller.txSelection,hPos - 135, vPos + 55); // TX model label
+            /** call createLowPass() to create low pass filter visual **/
+            createLowPass(hPos,vPos);
 
             /** call createCoupler() to create coupler visual **/
             createCoupler(hPos, vPos - 175);
@@ -185,15 +173,8 @@ public class repStageController implements Initializable {
             /** pre coupler to mask filter **/
             gc.strokeLine(hPos + 25, vPos - 125, hPos + 25, vPos - 200);
 
-            /** mask filter + post coupler **/
-            gc.strokeRect(hPos, vPos - 300, 50, 100);/** mask filter rectangle square **/
-            if(diagramIndex==0)
-                gc.strokeText("MASK FILTER",hPos - 110, vPos - 250);
-
-            /** mask filter details **/
-            gc.strokeLine(hPos + 20, vPos - 262.5, hPos + 40, vPos - 287.5);
-            gc.strokeLine(hPos + 20, vPos - 237.5, hPos + 20, vPos - 262.5);
-            gc.strokeLine(hPos + 20, vPos - 237.5, hPos + 40, vPos - 212.5);
+            /** call createMask() to create mask filter visual **/
+            createMask(hPos,vPos);
 
             /** call createCoupler() to create coupler visual **/
             createCoupler(hPos, vPos - 350);
@@ -202,7 +183,6 @@ public class repStageController implements Initializable {
 
             /** post coupler and onward **/
             gc.strokeLine(hPos + 25, vPos - 300, hPos + 25, vPos - 375);
-            gc.stroke();
 
             if(Controller.txSelectionCabinets == 1)
                 createAntenna(hPos+25,vPos-375);
@@ -231,8 +211,8 @@ public class repStageController implements Initializable {
                     /** call createCoupler() to create coupler visual **/
                     createCoupler(hPos, vPos - 500);
                     gc.strokeText("POST COUPLER",hPos - 110, vPos - 485);
-                    /********************************** CODE ADDED HERE FOR ANTENNA ADDITION******************************/
                     gc.strokeLine(hPos+25, vPos-700, hPos+25, vPos-500);
+
                     createAntenna(hPos+25,vPos-700);
                 }
             }
@@ -329,7 +309,7 @@ public class repStageController implements Initializable {
              *  incrementing this var allows for other cabinets, couplers, combiners, etc to be
              *  placed in appropriate horizontal positions
              **/
-            hPos += 125;
+            hPos += 125;// creates distance between cabinets
         }
 
         diagram.setWidth(bounds.getWidth());
@@ -445,7 +425,60 @@ public class repStageController implements Initializable {
         }
     }
 
+    /********** function to create antenna visual for diagram **********/
     private void createAntenna(double hPos1, double vPos1){
+
+        /** call createSwitch() to create switch visual **/
+        createSwitch(hPos1,vPos1);
+
+        /** call creatTestLoad() to create test load visual **/
+        createTestLoad(hPos1+55,vPos1+90);
+    }
+
+    /********** function to create test load visual for diagram **********/
+    private void createTestLoad(double hPos1, double vPos1){
+        gc.strokeRect(hPos1, vPos1, 50, 100);
+        gc.strokeLine(hPos1+25, vPos1, hPos1+25, vPos1+25);
+        gc.strokeLine(hPos1+25, vPos1+25, hPos1+5, vPos1+30);
+        gc.strokeLine(hPos1+5, vPos1+30, hPos1+45, vPos1+40);
+        gc.strokeLine(hPos1+45, vPos1+40, hPos1+5, vPos1+50);
+        gc.strokeLine(hPos1+5, vPos1+50, hPos1+45, vPos1+60);
+        gc.strokeLine(hPos1+45, vPos1+60, hPos1+5, vPos1+70);
+        gc.strokeLine(hPos1+5, vPos1+70, hPos1+45, vPos1+80);
+        gc.strokeLine(hPos1+45, vPos1+80, hPos1+5, vPos1+90);
+        gc.strokeLine(hPos1+5, vPos1+90, hPos1+25, vPos1+95);
+        gc.strokeText("TEST LOAD",hPos1-5, vPos1 +115);
+    }
+
+    /********** function to create low pass filter visual for diagram **********/
+    private void createLowPass(double hPos1, double vPos1){
+        /** create line from cabinet to low pass filter **/
+        gc.strokeLine(hPos1 + 25, vPos1, hPos1 + 25, vPos1 - 25);
+
+        /** low pass + pre coupler **/
+        gc.strokeRect(hPos1, vPos1 - 125, 50, 100);/** low pass rectangle **/
+        if(diagramIndex==0)
+            gc.strokeText("LOW PASS FILTER",hPos1 - 110, vPos1 - 75);
+
+        /** low pass details **/
+        gc.strokeLine(hPos1 + 20, vPos1 - 50, hPos1 + 20, vPos1 - 85);
+        gc.strokeLine(hPos1 + 20, vPos1 - 85, hPos1 + 40, vPos1 - 100);
+
+    }
+
+    /********** function to create mask filter visual for diagram **********/
+    private void createMask(double hPos1,double vPos1){
+        gc.strokeRect(hPos1, vPos1 - 300, 50, 100);/** mask filter rectangle square **/
+        if(diagramIndex==0)
+            gc.strokeText("MASK FILTER",hPos1 - 110, vPos1 - 250);
+
+        /** mask filter details **/
+        gc.strokeLine(hPos1 + 20, vPos1 - 262.5, hPos1 + 40, vPos1 - 287.5);
+        gc.strokeLine(hPos1 + 20, vPos1 - 237.5, hPos1 + 20, vPos1 - 262.5);
+        gc.strokeLine(hPos1 + 20, vPos1 - 237.5, hPos1 + 40, vPos1 - 212.5);
+    }
+
+    private void createSwitch(double hPos1,double vPos1){
         gc.strokeLine(hPos1, vPos1, hPos1 + 50, vPos1);
         gc.strokeOval(hPos1+42.5, vPos1-7.5, 15,15);
         gc.strokeLine(hPos1+50, vPos1, hPos1 + 80, vPos1+40);
@@ -453,16 +486,9 @@ public class repStageController implements Initializable {
         gc.strokeLine(hPos1+80,vPos1+40,hPos1+80, vPos1+90);
         gc.strokeOval(hPos1+72.5, vPos1-47.5, 15,15);
         gc.strokeOval(hPos1+102.5, vPos1-7.5, 15,15);
-
-        createTestLoad(hPos1+55,vPos1+90);
     }
 
-    private void createTestLoad(double hPos1, double vPos1){
-        gc.strokeRect(hPos1, vPos1, 50, 100);
-        gc.strokeLine(hPos1+25, vPos1, hPos1+25, vPos1+30);
-        gc.strokeLine(hPos1+25, vPos1+30, hPos1+5, vPos1+35);
-    }
-
+    /********** function to save/print diagram **********/
     public void printSaveDiagram() {
         System.out.println("printing/saving file!");
         // Create the Printer Job
@@ -486,6 +512,7 @@ public class repStageController implements Initializable {
         }
     }
 
+    /********** function to save/print item report **********/
     public void printSaveTable(){
         System.out.println("printing/saving file!");
         // Create the Printer Job
