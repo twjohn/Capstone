@@ -8,7 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
-import javafx.print.PrinterJob;
+import javafx.print.*;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -463,22 +463,50 @@ public class repStageController implements Initializable {
         gc.strokeLine(hPos1+25, vPos1+30, hPos1+5, vPos1+35);
     }
 
-    public void exportPDF() {
-        System.out.println("To Printer!");
-        Parent root = null;
-        try {
-            root = FXMLLoader.load(getClass().getResource("repStage.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void printSaveDiagram() {
+        System.out.println("printing/saving file!");
+        // Create the Printer Job
+        PrinterJob printerJob = PrinterJob.createPrinterJob();
+
+        // Get The Printer Job Settings
+        JobSettings jobSettings = printerJob.getJobSettings();
+
+        PageLayout pageLayout;
+        if (printerJob != null) {
+
+            printerJob.showPrintDialog(Controller.stage);
+
+            // Get The Printer
+            Printer printer = printerJob.getPrinter();
+            // Create the Page Layout of the Printer
+            pageLayout = printer.createPageLayout(Paper.C, PageOrientation.LANDSCAPE,Printer.MarginType.EQUAL);
+            jobSettings.setPageLayout(pageLayout);
+            printerJob.printPage(diagram);
+            printerJob.endJob();
         }
-        PrinterJob job = PrinterJob.createPrinterJob();
-        if (job != null) {
-            job.showPrintDialog(Controller.stage);
-            job.printPage(root);
-            job.endJob();
+    }
+
+    public void printSaveTable(){
+        System.out.println("printing/saving file!");
+        // Create the Printer Job
+        PrinterJob printerJob = PrinterJob.createPrinterJob();
+
+        // Get The Printer Job Settings
+        JobSettings jobSettings = printerJob.getJobSettings();
+
+        PageLayout pageLayout;
+
+        if (printerJob != null) {
+
+            printerJob.showPrintDialog(Controller.stage);
+
+            // Get The Printer
+            Printer printer = printerJob.getPrinter();
+            // Create the Page Layout of the Printer
+            pageLayout = printer.createPageLayout(Paper.A4, PageOrientation.LANDSCAPE,Printer.MarginType.EQUAL);
+            jobSettings.setPageLayout(pageLayout);
+            printerJob.printPage(itemReport);
+            printerJob.endJob();
         }
-        /*** test for later
-         * https://community.oracle.com/thread/2450090
-         */
     }
 }

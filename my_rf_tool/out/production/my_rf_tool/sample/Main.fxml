@@ -67,7 +67,7 @@
                      </effect>
             </TextField>
             <Label text="TPO: " HBox.margin="$x1" />
-            <TextField fx:id="tpo" onKeyTyped="#tpoChange_addTX" prefWidth="71.0">
+            <TextField fx:id="tpo" onKeyTyped="#tpoChange" prefWidth="71.0">
               <HBox.margin>
                 <Insets bottom="10.0" left="3.0" right="3.0" top="10.0" />
               </HBox.margin>
@@ -80,7 +80,7 @@
         </HBox>
         <HBox alignment="CENTER" minHeight="45.0" prefHeight="45.0" prefWidth="527.0000999999975">
           <children>
-            <ComboBox fx:id="tx_cb" blendMode="SRC_OVER" cache="false" disable="false" editable="false" mouseTransparent="false" onAction="#getTXInfo" onContextMenuRequested="#genRepCheck" onMouseClicked="#genRepCheck" onMouseEntered="#genRepCheck" onMousePressed="#genRepCheck" onMouseReleased="#genRepCheck" prefHeight="21.0" prefWidth="190.0" promptText="Select Transmitter">
+            <ComboBox fx:id="tx_cb" blendMode="SRC_OVER" cache="false" disable="false" editable="false" mouseTransparent="false" onAction="#getSelectedTXInfo" onContextMenuRequested="#genRepCheck" onMouseClicked="#genRepCheck" onMouseEntered="#genRepCheck" onMousePressed="#genRepCheck" onMouseReleased="#genRepCheck" prefHeight="21.0" prefWidth="190.0" promptText="Select Transmitter">
               <items>
                 <FXCollections fx:factory="observableArrayList" />
               </items>
@@ -91,7 +91,7 @@
                         <DropShadow height="5.0" radius="2.0" width="5.0" />
                      </effect>
             </ComboBox>
-            <CheckBox fx:id="dualExciter" contentDisplay="CENTER" mnemonicParsing="false" onContextMenuRequested="#genRepCheck" onMouseClicked="#genRepCheck" onMouseEntered="#genRepCheck" onMousePressed="#genRepCheck" onMouseReleased="#genRepCheck" prefWidth="190.0" text="Dual Exciters" HBox.margin="$x3" />
+            <CheckBox fx:id="dualExciter" contentDisplay="CENTER" mnemonicParsing="false" onAction="#selectDualExciters" onContextMenuRequested="#genRepCheck" onMouseClicked="#genRepCheck" onMouseEntered="#genRepCheck" onMousePressed="#genRepCheck" onMouseReleased="#genRepCheck" prefWidth="190.0" text="Dual Exciters" HBox.margin="$x3" />
             <ComboBox fx:id="mainAntFeed" onAction="#genRepCheck" onContextMenuRequested="#genRepCheck" onMouseClicked="#genRepCheck" onMouseEntered="#genRepCheck" onMousePressed="#genRepCheck" onMouseReleased="#genRepCheck" prefHeight="31.0" prefWidth="190.0" promptText="Main Antenna Feed" HBox.margin="$x3">
               <items>
                 <FXCollections fx:factory="observableArrayList">
@@ -102,6 +102,8 @@
                     <String fx:value="6-1/8 75Ω" />
                     <String fx:value="7-3/16" />
                     <String fx:value="8-3/16" />
+                    <String fx:value="WR1500" />
+                    <String fx:value="WR1800" />
                 </FXCollections>
               </items>
                      <effect>
@@ -136,6 +138,8 @@
                     <String fx:value="6-1/8 75Ω" />
                     <String fx:value="7-3/16" />
                     <String fx:value="8-3/16" />
+                    <String fx:value="WR1500" />
+                    <String fx:value="WR1800" />
                 </FXCollections>
               </items>
                      <effect>

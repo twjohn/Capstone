@@ -16,13 +16,13 @@
                <center>
                   <ScrollPane fitToHeight="true" pannable="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <content>
-                        <Canvas fx:id="diagram" height="2000.0" width="2000.0" />
+                        <Canvas fx:id="diagram" height="2000.0" width="1920.0" />
                      </content>
                   </ScrollPane>
                </center>
-               <left>
-                  <Button mnemonicParsing="false" onMouseClicked="#exportPDF" text="Export to PDF" BorderPane.alignment="CENTER" />
-               </left>
+               <bottom>
+                  <Button mnemonicParsing="false" onMouseClicked="#printSaveDiagram" text="Print/Save Diagram" BorderPane.alignment="CENTER" />
+               </bottom>
             </BorderPane>
          </content>
     </Tab>
@@ -31,7 +31,10 @@
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <center>
                   <TableView fx:id="itemReport" prefHeight="500.0" prefWidth="500.0" BorderPane.alignment="CENTER" />
-               </center></BorderPane>
+               </center>
+               <bottom>
+                  <Button mnemonicParsing="false" onMouseClicked="#printSaveTable" text="Print/Save Item Report" BorderPane.alignment="CENTER" />
+               </bottom></BorderPane>
          </content>
     </Tab>
   </tabs>
