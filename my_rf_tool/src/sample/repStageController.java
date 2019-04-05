@@ -5,18 +5,14 @@ import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.print.*;
-import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Screen;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -74,8 +70,7 @@ public class repStageController implements Initializable {
                     new Report(Controller.SWPID, Controller.selectedSWDescription),//exciter software
                     new Report(Controller.filterPID, Controller.selectedFilterDescription),//filter info
                     new Report(Controller.paModulePID, Controller.selectedPADescription),//pa module info
-                    new Report(Controller.auxAntFeedSelection, "Aux Antenna Feed: "+Controller.auxAntFeedSelection),//aux antenna feed info
-                    new Report("arbitrary info", "arbitrary info")
+                    new Report(Controller.auxAntFeedSelection, "Aux Antenna Feed: "+Controller.auxAntFeedSelection)//aux antenna feed info
                     /** other info to be added here soon **/
             );
 
@@ -122,26 +117,27 @@ public class repStageController implements Initializable {
         if(Controller.txSelectionCabinets == 1) {
             vPos = 850;
             hPos= (bounds.getWidth()/2)-25;
+
         }
         else if(Controller.txSelectionCabinets == 2) {
             vPos = 900;
-            hPos= (bounds.getWidth()/2) - 93.5;
+            hPos= (bounds.getWidth()/2.5) - 93.5;
         }
         else if(Controller.txSelectionCabinets == 3) {
             vPos = 1050;
-            hPos= (bounds.getWidth()/2) - 124.75;
+            hPos= (bounds.getWidth()/2.5) - 124.75;
         }
         else if(Controller.txSelectionCabinets == 4) {
             vPos = 1050;
-            hPos= (bounds.getWidth()/2) - 156;
+            hPos= (bounds.getWidth()/2.5) - 156;
         }
         else if(Controller.txSelectionCabinets == 5) {
             vPos = 1100;
-            hPos= (bounds.getWidth()/2) - 187.25;
+            hPos= (bounds.getWidth()/2.5) - 187.25;
         }
         else {
             vPos = 1100;
-            hPos= (bounds.getWidth()/2) - 187.25;
+            hPos= (bounds.getWidth()/2.5) - 187.25;
         }
         for (diagramIndex = 0; diagramIndex < Controller.txSelectionCabinets; diagramIndex++) {
 
@@ -498,18 +494,17 @@ public class repStageController implements Initializable {
         JobSettings jobSettings = printerJob.getJobSettings();
 
         PageLayout pageLayout;
-        if (printerJob != null) {
 
-            printerJob.showPrintDialog(Controller.stage);
-
-            // Get The Printer
-            Printer printer = printerJob.getPrinter();
-            // Create the Page Layout of the Printer
-            pageLayout = printer.createPageLayout(Paper.C, PageOrientation.LANDSCAPE,Printer.MarginType.EQUAL);
-            jobSettings.setPageLayout(pageLayout);
-            printerJob.printPage(diagram);
+        if(printerJob.showPrintDialog(Controller.stage) == false)
             printerJob.endJob();
-        }
+        // Get The Printer
+        Printer printer = printerJob.getPrinter();
+
+        // Create the Page Layout of the Printer
+        pageLayout = printer.createPageLayout(Paper.C, PageOrientation.LANDSCAPE,Printer.MarginType.EQUAL_OPPOSITES);
+        jobSettings.setPageLayout(pageLayout);
+        printerJob.printPage(diagram);
+        printerJob.endJob();
     }
 
     /********** function to save/print item report **********/
@@ -522,18 +517,15 @@ public class repStageController implements Initializable {
         JobSettings jobSettings = printerJob.getJobSettings();
 
         PageLayout pageLayout;
-
-        if (printerJob != null) {
-
-            printerJob.showPrintDialog(Controller.stage);
+        if(printerJob.showPrintDialog(Controller.stage) == false)
+            printerJob.endJob();
 
             // Get The Printer
             Printer printer = printerJob.getPrinter();
             // Create the Page Layout of the Printer
-            pageLayout = printer.createPageLayout(Paper.A4, PageOrientation.LANDSCAPE,Printer.MarginType.EQUAL);
+            pageLayout = printer.createPageLayout(Paper.A4, PageOrientation.LANDSCAPE,Printer.MarginType.DEFAULT);
             jobSettings.setPageLayout(pageLayout);
             printerJob.printPage(itemReport);
             printerJob.endJob();
-        }
     }
 }

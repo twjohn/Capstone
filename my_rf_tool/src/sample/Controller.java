@@ -32,7 +32,6 @@ public class Controller implements Initializable {
     public Button genRep;
     public ComboBox tx_cb, paModules, mainExciterSW, filter, switchPatch, testLoad, mainAntFeed, auxAntFeed;
     public TextField channel, tpo;
-    public ImageView repImage;
     public CheckBox dualExciter;
     public BorderPane main;
     public static Stage stage = new Stage();
